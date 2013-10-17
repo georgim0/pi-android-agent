@@ -24,6 +24,7 @@ public  abstract class InputWidget extends Widget {
 		return label;
 	}
 	
+	public abstract View createMe(Context c);
 
 	public View createView(Context c)
 	{

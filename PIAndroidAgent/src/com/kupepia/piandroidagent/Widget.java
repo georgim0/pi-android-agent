@@ -5,5 +5,5 @@ import android.view.View;
 
 public abstract class Widget {
 	
-	public abstract View createMe(Context c);
+	public abstract View createView(Context c);
 }

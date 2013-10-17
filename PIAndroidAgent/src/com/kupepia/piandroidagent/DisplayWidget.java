@@ -1,14 +1,18 @@
 package com.kupepia.piandroidagent;
 
-import android.content.Context;
-import android.view.View;
+
 
 public abstract class DisplayWidget extends Widget {
 
-	private String content;
+	private final String content;
 	
 	public DisplayWidget(String content) {
 		this.content = content;
 	}
+	
+	public String getContent() {
+		return content;
+	}
+
 
 }
