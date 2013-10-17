@@ -3,7 +3,9 @@ package com.kupepia.piandroidagent;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class XMLParser {
+import android.app.Activity;
+
+public class XMLParser extends Activity {
 
 	public XMLParser() throws FileNotFoundException{
 		File x = new File("sample1.xml");

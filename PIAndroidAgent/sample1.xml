@@ -1,0 +1,18 @@
+<response>
+    <widgets>
+        <textview>
+        <uri>uri
+        </uri>
+        <label>This is a textview
+        </label>
+        </textview>
+    </widgets>
+    <submit>
+        <url>url
+        </url>
+        <format>
+            <url>url
+            </url>
+        </format>
+    </submit>
+</response>
