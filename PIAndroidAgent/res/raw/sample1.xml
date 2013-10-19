@@ -8,9 +8,9 @@
         	<uri>uri</uri>
         	<label>This is a checkbox</label>
         </widget>
-        <widget type="listview">
+        <widget type="dropdownlist">
         	<uri>uri</uri>
-        	<label>This is a listview</label>
+        	<label>This is a dropdownlist</label>
         </widget>
     </widgets>
     <submit text="Submit">

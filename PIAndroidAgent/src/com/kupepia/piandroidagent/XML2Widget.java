@@ -19,20 +19,11 @@ import android.widget.TextView;
 
 public class XML2Widget {
 	
-	private Context mContext;
 	private ArrayList<Widget> widgets;
 		
-	public XML2Widget(Context mContext) throws FileNotFoundException {
-		this.mContext = mContext;
-		
-		InputStream xmlInputStream = 
-				this.mContext.getResources().openRawResource(R.raw.sample1);
+	public XML2Widget( Document doc ) throws FileNotFoundException {
 
 		try {
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-					.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(xmlInputStream);
 
 			doc.getDocumentElement().normalize();
 			
@@ -79,11 +70,5 @@ public class XML2Widget {
 		return widgets;
 	}
 
-	public View getView(){
-		TextView tv = new TextView(mContext);
-		tv.setText("koupepia");
-		return tv;
-		
-	}
 
 }

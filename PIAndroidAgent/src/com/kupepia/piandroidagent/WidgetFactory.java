@@ -18,6 +18,7 @@ public class WidgetFactory {
 				widget = new TextviewDisplayWidget(uri);
 				int heading = type.ordinal() - WidgetType.TEXTVIEW.ordinal();
 				((TextviewDisplayWidget)widget).setHeading(heading);
+				break;
 			case LISTVIEW:
 				break;
 			case CHECKBOX:
