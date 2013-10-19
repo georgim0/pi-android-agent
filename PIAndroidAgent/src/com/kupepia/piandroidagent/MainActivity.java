@@ -10,7 +10,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
 
 import com.kupepia.piandroidagent.requests.RequestHandler;
-import com.kupepia.piandroidagent.requests.XML2Widget;
 
 public class MainActivity extends Activity {
 	RelativeLayout mainRelativeLayout = null;
