@@ -25,7 +25,8 @@ public class XML2Widget {
 	public XML2Widget(Context mContext) throws FileNotFoundException {
 		this.mContext = mContext;
 		
-		InputStream xmlInputStream = this.mContext.getResources().openRawResource(R.raw.sample1);
+		InputStream xmlInputStream = 
+				this.mContext.getResources().openRawResource(R.raw.sample1);
 
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
@@ -46,7 +47,9 @@ public class XML2Widget {
 					Element eElement = (Element) nNode;
 					String labelContent = 
 							eElement.getElementsByTagName("label").item(0).getTextContent();
-					String uri = eElement.getElementsByTagName("uri").item(0).getTextContent();
+					String uri = 
+							eElement.getElementsByTagName("uri").item(0).getTextContent();
+					
 					String attributeType = eElement.getAttribute("type");
 					Widget widget = null;
 					if (labelContent.length() > 0)
