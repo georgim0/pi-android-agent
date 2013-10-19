@@ -1,13 +1,12 @@
 package com.kupepia.piandroidagent.test;
 
+import android.test.AndroidTestCase;
+
 import com.kupepia.piandroidagent.CheckboxInputWidget;
 import com.kupepia.piandroidagent.DropDownListInputWidget;
 import com.kupepia.piandroidagent.TextviewDisplayWidget;
 import com.kupepia.piandroidagent.Widget;
 import com.kupepia.piandroidagent.WidgetFactory;
-
-import junit.framework.Assert;
-import android.test.AndroidTestCase;
 public class TestWidgetFactory extends AndroidTestCase {
 
 	

@@ -1,12 +1,15 @@
 package com.kupepia.piandroidagent;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
+
+import com.kupepia.piandroidagent.requests.RequestHandler;
 
 public class MainActivity extends Activity {
 	RelativeLayout mainRelativeLayout = null;
@@ -17,21 +20,31 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		mainRelativeLayout = (RelativeLayout) this
 				.findViewById(R.id.main_relative_layout);
-		
+
+		XML2Widget xml2Widget = null;
 		try {
-			XML2Widget xml2Widget = new XML2Widget(this);
-			//View view = xml2Widget.getView();
-			ArrayList<Widget> wList = xml2Widget.getWidgets();
-			
-			for(Widget w : wList) {
-				mainRelativeLayout.addView(w.createView(this));
-			}
-			
-		} catch (FileNotFoundException e) {
+			xml2Widget = new XML2Widget(RequestHandler.getDoc(this));
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		// View view = xml2Widget.getView();
+		if (xml2Widget != null) {
+			ArrayList<Widget> wList = xml2Widget.getWidgets();
+			
+		
+			
+			//for (Widget w : wList) {
+				View v = wList.get(0).createView(this);
+				v.setId(v.hashCode());
+				mainRelativeLayout.addView(v);
+				RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				lp.addRule(RelativeLayout.BELOW, v.getId());
+				mainRelativeLayout.addView(wList.get(2).createView(this), lp);
+			//}
 
+		}
 	}
 
 	@Override

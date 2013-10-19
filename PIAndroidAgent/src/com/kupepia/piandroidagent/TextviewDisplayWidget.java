@@ -2,6 +2,7 @@ package com.kupepia.piandroidagent;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.TextView;
 
 public class TextviewDisplayWidget extends DisplayWidget {
 
@@ -13,8 +14,10 @@ public class TextviewDisplayWidget extends DisplayWidget {
 
 	@Override
 	public View createView(Context c) {
-		// TODO Auto-generated method stub
-		return null;
+		TextView tv = new TextView(c);
+		tv.setText(this.getContent());
+		//heading needs adding
+		return tv;
 	}
 
 	public void setHeading(int heading)

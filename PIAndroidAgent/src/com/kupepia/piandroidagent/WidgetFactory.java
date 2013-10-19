@@ -1,5 +1,7 @@
 package com.kupepia.piandroidagent;
 
+import android.util.Log;
+
 public class WidgetFactory {
 	
 	
@@ -18,6 +20,7 @@ public class WidgetFactory {
 				widget = new TextviewDisplayWidget(uri);
 				int heading = type.ordinal() - WidgetType.TEXTVIEW.ordinal();
 				((TextviewDisplayWidget)widget).setHeading(heading);
+				break;
 			case LISTVIEW:
 				break;
 			case CHECKBOX:
@@ -50,6 +53,7 @@ public class WidgetFactory {
 	public static Widget createWidget(String sType, String uri)
 	{
 		WidgetType type = WidgetType.fromString(sType);
+		Log.e("createWidget", type.getText());
 		return createWidget(type, uri);
 		
 	}
