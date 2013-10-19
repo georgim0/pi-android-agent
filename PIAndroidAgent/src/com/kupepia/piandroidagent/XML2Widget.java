@@ -46,12 +46,14 @@ public class XML2Widget {
 					Element eElement = (Element) nNode;
 					String labelContent = 
 							eElement.getElementsByTagName("label").item(0).getTextContent();
+					String uri = eElement.getElementsByTagName("uri").item(0).getTextContent();
 					String attributeType = eElement.getAttribute("type");
 					Widget widget = null;
 					if (labelContent.length() > 0)
-						widget = WidgetFactory.createWidgetWithLabel(attributeType, labelContent);
+						widget = 
+						WidgetFactory.createWidgetWithLabel(attributeType, uri, labelContent);
 					else
-						widget = WidgetFactory.createWidget(attributeType);
+						widget = WidgetFactory.createWidget(attributeType, uri);
 					widgets.add(widget);
 					
 				}//if

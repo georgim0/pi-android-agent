@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 public  abstract class InputWidget extends Widget {
 
-	private final String labelContent;
+	private String labelContent;
 	private final String uri;
 	
 	public InputWidget(String label, String uri)
@@ -48,6 +48,10 @@ public  abstract class InputWidget extends Widget {
 		return uri;
 	}
 	
+	public void setLabelContent(String content)
+	{
+		this.labelContent = content;
+	}
 	
 	
 

@@ -4,7 +4,7 @@ package com.kupepia.piandroidagent;
 
 public abstract class DisplayWidget extends Widget {
 
-	private final String content;
+	private String content;
 	
 	public DisplayWidget(String content) {
 		this.content = content;
@@ -14,5 +14,8 @@ public abstract class DisplayWidget extends Widget {
 		return content;
 	}
 
-
+	public void setContent(String content)
+	{
+		this.content = content;
+	}
 }
