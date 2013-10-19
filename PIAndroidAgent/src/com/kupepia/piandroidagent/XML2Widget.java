@@ -25,18 +25,13 @@ public class XML2Widget {
 	public XML2Widget(Context mContext) throws FileNotFoundException {
 		this.mContext = mContext;
 		
-		//File xmlFile = new File("assets/sample1.xml");
-		InputStream xmlFile = this.mContext.getResources().openRawResource(R.raw.sample1);
-		/*
-		if (!xmlFile.exists()) {
-			throw new FileNotFoundException();
-		}
-		*/
+		InputStream xmlInputStream = this.mContext.getResources().openRawResource(R.raw.sample1);
+
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(xmlFile);
+			Document doc = dBuilder.parse(xmlInputStream);
 
 			doc.getDocumentElement().normalize();
 			
@@ -45,21 +40,21 @@ public class XML2Widget {
 			for (int temp = 0; temp < nList.getLength(); temp++) {
 		 
 				Node nNode = nList.item(temp);
-		 
-				//System.out.println("\nCurrent Element :" + nNode.getNodeName());
-		 
+		 		 
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 		 
 					Element eElement = (Element) nNode;
-					Log.w("XML", eElement.getElementsByTagName("label").item(0).getTextContent());
-					//System.out.println("Widget type : " + eElement.getAttribute("type"));
-					//System.out.println("'Uri : " + eElement.getElementsByTagName("uri").item(0).getTextContent());
-					//System.out.println("Label : " + eElement.getElementsByTagName("label").item(0).getTextContent());
-					if (eElement.getAttribute("type").equals("textview")){
-						TextViewDisplayWidget widget = new TextViewDisplayWidget(eElement.getElementsByTagName("label").item(0).getTextContent());
-						widgets.add(widget);
-					}
-				}
+					String labelContent = 
+							eElement.getElementsByTagName("label").item(0).getTextContent();
+					String attributeType = eElement.getAttribute("type");
+					Widget widget = null;
+					if (labelContent.length() > 0)
+						widget = WidgetFactory.createWidgetWithLabel(attributeType, labelContent);
+					else
+						widget = WidgetFactory.createWidget(attributeType);
+					widgets.add(widget);
+					
+				}//if
 			}
 			
 			NodeList nList2 = doc.getElementsByTagName("submit");
@@ -68,9 +63,6 @@ public class XML2Widget {
 			//System.out.println("\nCurrent Element :" + nNode.getNodeName());
 			Element eElement = (Element) nNode;
 			 
-			//System.out.println("Staff id : " + eElement.getAttribute("text"));
-			//System.out.println("First Name : " + eElement.getElementsByTagName("url").item(0).getTextContent());
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();

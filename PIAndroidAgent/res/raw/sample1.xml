@@ -4,11 +4,11 @@
         	<uri>uri</uri>
         	<label>This is a textview</label>
         </widget>
-        <widget type="textview">
+        <widget type="checkbox">
         	<uri>uri</uri>
         	<label>This is a checkbox</label>
         </widget>
-        <widget type="textview">
+        <widget type="listview">
         	<uri>uri</uri>
         	<label>This is a listview</label>
         </widget>
