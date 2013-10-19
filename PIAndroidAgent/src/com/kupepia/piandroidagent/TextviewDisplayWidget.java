@@ -7,10 +7,11 @@ import android.widget.TextView;
 public class TextviewDisplayWidget extends DisplayWidget {
 
 	private int heading;
-	public TextviewDisplayWidget(String content) {
-		super(content);
-		// TODO Auto-generated constructor stub
+	
+	public TextviewDisplayWidget(String content, String uri) {
+		super(content, uri);
 	}
+
 
 	@Override
 	public View createView(Context c) {
@@ -28,4 +29,5 @@ public class TextviewDisplayWidget extends DisplayWidget {
 	{
 		return this.heading;
 	}
+	
 }

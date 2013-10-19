@@ -37,7 +37,7 @@ public  abstract class InputWidget extends Widget {
 		inputWidget.setId(inputWidget.hashCode());
 		rl.addView(label, lp);
 		lp = new RelativeLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		
 		lp.addRule(RelativeLayout.RIGHT_OF, label.getId());
 		rl.addView(inputWidget, lp);

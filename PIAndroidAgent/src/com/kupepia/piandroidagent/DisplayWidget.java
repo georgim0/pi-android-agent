@@ -5,8 +5,9 @@ package com.kupepia.piandroidagent;
 public abstract class DisplayWidget extends Widget {
 
 	private String content;
+	private String uri;
 	
-	public DisplayWidget(String content) {
+	public DisplayWidget(String content, String uri) {
 		this.content = content;
 	}
 	
@@ -17,5 +18,10 @@ public abstract class DisplayWidget extends Widget {
 	public void setContent(String content)
 	{
 		this.content = content;
+	}
+	
+	public String getUri()
+	{
+		return this.uri;
 	}
 }

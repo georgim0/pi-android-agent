@@ -17,7 +17,7 @@ public class WidgetFactory {
 			case TEXTVIEW_H4:
 			case TEXTVIEW_H5:
 			case TEXTVIEW_H6:
-				widget = new TextviewDisplayWidget(uri);
+				widget = new TextviewDisplayWidget("", uri);
 				int heading = type.ordinal() - WidgetType.TEXTVIEW.ordinal();
 				((TextviewDisplayWidget)widget).setHeading(heading);
 				break;
@@ -46,6 +46,8 @@ public class WidgetFactory {
 		widget = createWidget(type, uri);
 		if (widget instanceof InputWidget)
 			((InputWidget)widget).setLabelContent(labelContent);
+		else if (widget instanceof TextviewDisplayWidget)
+			((TextviewDisplayWidget)widget).setContent(labelContent);
 		return widget;
 		
 	}
@@ -61,7 +63,7 @@ public class WidgetFactory {
 	public static Widget createWidgetWithLabel(String sType, String uri, String labelContent)
 	{
 		WidgetType type = WidgetType.fromString(sType);
-		return createWidgetWithLabel(type, labelContent, uri);
+		return createWidgetWithLabel(type, uri, labelContent);
 		
 	}
 
