@@ -1,0 +1,27 @@
+<android_menu>
+    
+    <action>
+        <uri>uri</uri>
+
+        <label>ena</label>
+
+        <value>1</value>
+    </action>
+    
+    <action>
+        <uri>uri</uri>
+
+        <label>dio</label>
+
+        <value>2</value>
+    </action>
+
+    <action>
+        <uri>uri</uri>
+
+        <label>tria</label>
+
+        <value>3</value>
+    </action>
+ 
+</android_menu>

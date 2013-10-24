@@ -45,7 +45,8 @@ public final class R {
     }
     public static final class raw {
         public static final int sample1=0x7f040000;
-        public static final int sample_request=0x7f040001;
+        public static final int sample_menu=0x7f040001;
+        public static final int sample_request=0x7f040002;
     }
     public static final class string {
         public static final int action_forgot_password=0x7f060006;
