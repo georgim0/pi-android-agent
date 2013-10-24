@@ -16,7 +16,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import android.test.AndroidTestCase;
-import android.util.Log;
 
 import com.kupepia.piandroidagent.requests.CommunicationManager;
 
@@ -64,8 +63,13 @@ public class TestCommunicationManager extends AndroidTestCase {
 			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 			
 			//create <response>
-			Element root = doc.createElement("response");
+			Element root = doc.createElement("pi-api");
 			doc.appendChild(root);
+			root.setAttribute("version", "1.0");
+			
+			//create <response>
+			Element response = doc.createElement("response");
+			root.appendChild(response);
 			
 			//create <code>
 			Element username = doc.createElement("code");
@@ -83,5 +87,12 @@ public class TestCommunicationManager extends AndroidTestCase {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void testSignIn(){
+		CommunicationManager cm = CommunicationManager.getInstance();
+		cm.setRemoteHost("https://192.168.56.101:8005");
+		int responseCode = cm.signIn("");
+		assertTrue(responseCode >= 0);
 	}
 }
