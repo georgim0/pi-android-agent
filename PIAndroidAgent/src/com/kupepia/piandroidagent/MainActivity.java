@@ -2,6 +2,8 @@ package com.kupepia.piandroidagent;
 
 import java.util.ArrayList;
 
+import org.w3c.dom.Document;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +13,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.kupepia.piandroidagent.requests.RequestHandler;
+import com.kupepia.piandroidagent.utils.XMLUtils;
 
 public class MainActivity extends Activity {
 	RelativeLayout mainRelativeLayout = null;
@@ -24,7 +27,9 @@ public class MainActivity extends Activity {
 		widgetsOnScreenListView = new ListView(this);
 		XML2Widget xml2Widget = null;
 		try {
-			xml2Widget = new XML2Widget(RequestHandler.getDoc(this));
+			Document doc = XMLUtils.stream2Document(
+					this.getResources().openRawResource(R.raw.sample1));
+			xml2Widget = new XML2Widget(doc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
