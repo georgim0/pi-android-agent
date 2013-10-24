@@ -17,7 +17,7 @@ public class CommunicationManager {
 	private static CommunicationManager cm = null;
 	private String ip;
 	private static String USERNAME = "admin";
-	private static String SIGN_IN_LOCATION = "/signin";
+	private static String SIGN_IN_LOCATION = "api-bin/pi_api.py";
 	
 	private CommunicationManager()
 	{
@@ -50,9 +50,9 @@ public class CommunicationManager {
 		return RequestHandler.submitRequest(this.ip+"/" + location, request);
 	}
 	
-	public boolean signIn(String api_key) {
+	public int signIn(String api_key) {
 		//this method is a stab TODO
-
+		api_key = "06ZWkfBxpdAUE";
 		Request request;
 		
 		try {
@@ -65,12 +65,7 @@ public class CommunicationManager {
 			Document response = this.sendRequest(SIGN_IN_LOCATION, request);
 			
 			int code = getResponseCode(response);
-			
-			if (code == 0) {
-				return true;
-			}
-			
-			return false;
+			return code;
 			
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
@@ -89,7 +84,7 @@ public class CommunicationManager {
 			e.printStackTrace();
 		} 
 
-		return false;
+		return -1;
 		
 	}
 	
@@ -128,9 +123,9 @@ public class CommunicationManager {
 	
 	public int getResponseCode(Document response){
 		response.getDocumentElement().normalize();
-		Element rootElement = response.getDocumentElement();
-		
-		String code = rootElement.getElementsByTagName("code").item(0).getTextContent();
+		Element pi_api = response.getDocumentElement();
+		Element responseElement = (Element) pi_api.getElementsByTagName("response").item(0);
+		String code = pi_api.getElementsByTagName("code").item(0).getTextContent();
 		
 		return Integer.parseInt(code);
 	}

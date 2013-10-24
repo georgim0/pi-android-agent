@@ -30,7 +30,7 @@ public class RequestHandler {
 			ParserConfigurationException
 	{
 		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost("url");
+		HttpPost httppost = new HttpPost(url);
 		httppost.setHeader("xml", request.toString());
 	    HttpResponse httpresponse = httpclient.execute(httppost);
 	    String xmlResponse = EntityUtils.toString(httpresponse.getEntity());
