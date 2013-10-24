@@ -1,12 +1,8 @@
 package com.kupepia.piandroidagent.requests;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.http.HttpResponse;
@@ -18,9 +14,6 @@ import org.apache.http.util.EntityUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import android.content.Context;
-
-import com.kupepia.piandroidagent.R;
 import com.kupepia.piandroidagent.utils.XMLUtils;
 
 public class RequestHandler {

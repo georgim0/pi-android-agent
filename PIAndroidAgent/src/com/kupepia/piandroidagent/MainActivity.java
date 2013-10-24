@@ -7,12 +7,9 @@ import org.w3c.dom.Document;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.kupepia.piandroidagent.requests.RequestHandler;
 import com.kupepia.piandroidagent.utils.XMLUtils;
 
 public class MainActivity extends Activity {

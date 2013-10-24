@@ -6,18 +6,16 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.test.AndroidTestCase;
+
 import com.kupepia.piandroidagent.R;
 import com.kupepia.piandroidagent.requests.Request;
 import com.kupepia.piandroidagent.requests.RequestHandler;
-
-import android.test.AndroidTestCase;
-import android.util.Log;
 
 public class TestRequest extends AndroidTestCase {
 	
