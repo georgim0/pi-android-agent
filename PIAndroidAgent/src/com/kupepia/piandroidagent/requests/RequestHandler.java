@@ -1,6 +1,11 @@
 package com.kupepia.piandroidagent.requests;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,9 +32,11 @@ public class RequestHandler {
 	
 	protected static Document submitRequest(String url, Request request) 
 			throws ClientProtocolException, IOException, SAXException, 
-			ParserConfigurationException
+			ParserConfigurationException, KeyManagementException, 
+			UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, 
+			CertificateException
 	{
-		HttpClient httpclient = new DefaultHttpClient();
+		HttpClient httpclient = CommunicationManager.createHttpClient();
 		HttpPost httppost = new HttpPost(url);
 		httppost.setHeader("xml", request.toString());
 	    HttpResponse httpresponse = httpclient.execute(httppost);

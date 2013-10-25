@@ -1,5 +1,7 @@
 package com.kupepia.piandroidagent;
 
+import com.kupepia.piandroidagent.requests.CommunicationManager;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -124,18 +126,18 @@ public class LoginActivity extends Activity {
 			focusView = mPasswordView;
 			cancel = true;
 		}
-
-		// Check for a valid email address.
-		if (TextUtils.isEmpty(mEmail)) {
-			mEmailView.setError(getString(R.string.error_field_required));
-			focusView = mEmailView;
-			cancel = true;
-		} else if (!mEmail.contains("@")) {
-			mEmailView.setError(getString(R.string.error_invalid_email));
-			focusView = mEmailView;
+		
+		//try to sign in
+		CommunicationManager cm = CommunicationManager.getInstance();
+		cm.setRemoteHost(mEmail);
+		int returnCode = -1;
+		try {
+			returnCode = cm.signIn(mPassword);
+		}
+		catch (Exception e)
+		{
 			cancel = true;
 		}
-
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.

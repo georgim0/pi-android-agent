@@ -21,9 +21,7 @@ import com.kupepia.piandroidagent.requests.CommunicationManager;
 
 public class TestCommunicationManager extends AndroidTestCase {
 
-	public void testSendRequest() {
 
-	}
 
 	public void testCreateRequestDoc() {
 		CommunicationManager cm = CommunicationManager.getInstance();
@@ -92,7 +90,14 @@ public class TestCommunicationManager extends AndroidTestCase {
 	public void testSignIn(){
 		CommunicationManager cm = CommunicationManager.getInstance();
 		cm.setRemoteHost("https://192.168.56.101:8005");
-		int responseCode = cm.signIn("");
-		assertTrue(responseCode >= 0);
+		cm.setContext(this.getContext());
+		try {
+			int responseCode = cm.signIn("");
+			assertTrue(responseCode >= 0);
+		}
+		catch (Exception e)
+		{
+			fail();
+		}
 	}
 }
