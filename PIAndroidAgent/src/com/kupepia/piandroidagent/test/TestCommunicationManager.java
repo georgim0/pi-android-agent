@@ -39,7 +39,7 @@ public class TestCommunicationManager extends AndroidTestCase {
 			String output = writer.getBuffer().toString()
 					.replaceAll("\n|\r", "");
 
-			String expectedOutput = "<request type=\"authenticate\">"
+			String expectedOutput = "<request type=\"authentication\">"
 						+ "<username>admin</username>" 
 						+ "<api-key>hello</api-key>"
 						+ "</request>";
@@ -92,7 +92,7 @@ public class TestCommunicationManager extends AndroidTestCase {
 		cm.setRemoteHost("https://192.168.56.101:8005");
 		cm.setContext(this.getContext());
 		try {
-			int responseCode = cm.signIn("");
+			int responseCode = cm.signIn("17g5HwTpKfVjM");
 			assertTrue(responseCode >= 0);
 		}
 		catch (Exception e)

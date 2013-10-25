@@ -6,6 +6,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.kupepia.piandroidagent.utils.XMLUtils;
+
 public class Request {
 	
 	private Document xmlDocument;
@@ -52,7 +54,7 @@ public class Request {
 	
 	public String toString()
 	{
-		return xmlDocument.getTextContent();
+		return XMLUtils.Document2String(this.xmlDocument);
 	}
 
 }

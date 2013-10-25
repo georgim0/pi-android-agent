@@ -114,8 +114,7 @@ public class CommunicationManager {
 			Element root = doc.createElement("request");
 			doc.appendChild(root);
 			
-			//add attribute type = authenticate
-			root.setAttribute("type", "authenticate");
+			root.setAttribute("type", "authentication");
 			
 			//create <username>
 			Element username = doc.createElement("username");
