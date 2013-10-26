@@ -6,6 +6,8 @@
         <label>ena</label>
 
         <value>1</value>
+        
+        <url></url>
     </action>
     
     <action>
@@ -14,6 +16,7 @@
         <label>dio</label>
 
         <value>2</value>
+        <url></url>
     </action>
 
     <action>
@@ -22,6 +25,7 @@
         <label>tria</label>
 
         <value>3</value>
+        <url></url>
     </action>
  
 </android_menu>
