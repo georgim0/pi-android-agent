@@ -14,6 +14,7 @@ import org.w3c.dom.NodeList;
 import android.test.AndroidTestCase;
 
 import com.kupepia.piandroidagent.R;
+import com.kupepia.piandroidagent.requests.CommunicationManager;
 import com.kupepia.piandroidagent.requests.Request;
 import com.kupepia.piandroidagent.requests.RequestHandler;
 import com.kupepia.piandroidagent.utils.XMLUtils;
@@ -88,6 +89,28 @@ public class TestRequest extends AndroidTestCase {
 			boolean condition2 = keyFromReq.equals("uri://2") && 
 					valueFromReq.equals("2");
 			assertTrue(condition1 || condition2);
+		}
+	}
+	
+	public void testSubmitRequestOnPowerManager() throws Throwable {
+		String uri = "def://power_management";
+		String value = "default";
+		String username = "admin";
+		String apikey="66rhb8N/pXAL6";
+				
+		try {	
+			HashMap<String, String> map = new HashMap<String, String>();
+			Request req = RequestHandler.buildRequest(map);
+			map.put(uri, value);
+			CommunicationManager cm = CommunicationManager.getInstance();
+			req.addAuthentication(username, apikey);
+			Document responseDoc = cm.sendRequest("/api-bin/power_management_android.py", req);
+			String xmlString = XMLUtils.Document2String(responseDoc);
+			assertTrue(xmlString.contains("response"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			fail();
+			e.printStackTrace();
 		}
 	}
 	
