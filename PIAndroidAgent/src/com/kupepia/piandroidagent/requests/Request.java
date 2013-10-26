@@ -70,16 +70,16 @@ public class Request {
 		
 		Element el_username = 
 				this.xmlDocument.createElement("username");
-		el_username.setNodeValue(username);
+		el_username.setTextContent(username);
 		
 		Element el_apikey = 
 				this.xmlDocument.createElement("api-key");
-		el_apikey.setNodeValue(apikey);
+		el_apikey.setTextContent(apikey);
 		
 		el_auth.appendChild(el_username);
 		el_auth.appendChild(el_apikey);
 		
-		this.xmlDocument.appendChild(el_auth);
+		this.xmlDocument.getFirstChild().appendChild(el_auth);
 				
 	}
 	

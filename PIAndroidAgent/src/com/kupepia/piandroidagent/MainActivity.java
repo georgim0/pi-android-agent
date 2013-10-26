@@ -2,6 +2,12 @@ package com.kupepia.piandroidagent;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,7 +38,7 @@ public class MainActivity extends Activity {
 	private RelativeLayout mainRelativeLayout = null;
 	private ListView widgetsOnScreenListView = null;
 	private Context mContext;
-	String username = "";
+	String address = "";
 	String apikey = "";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +46,14 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		mainRelativeLayout = (RelativeLayout) this
 				.findViewById(R.id.main_relative_layout);
+		mContext = this;
 		CommunicationManager cm = CommunicationManager.getInstance();
 		cm.setContext(this);
 		Intent intent = this.getIntent();
-		String id = intent.getStringExtra("username");
-		String name = intent.getStringExtra("apikey");
+		/*address = intent.getStringExtra("address");
+		apikey = intent.getStringExtra("apikey");*/
+		address = "https://192.168.56.101:8005";
+		apikey = "27WS0aRgGyf1c";
 	}
 
 	private void showMsg(String msg) {
@@ -56,25 +65,22 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		getMenuInflater().inflate(R.menu.main, menu);
-
-		ArrayList<MenuElement> menuList = getMenuList();
-		for (MenuElement menuElement : menuList) {
-			menu.add(menuElement.getLabel());
-		}
+		new RequestMenu().execute(menu);
+		
 
 		return true;
 	}
 
-	private ArrayList<MenuElement> getMenuList() {
+	private ArrayList<MenuElement> getMenuList() throws Exception {
 
 		Document doc = null;
-		try {
-			doc = XMLUtils.stream2Document(this.getResources().openRawResource(
-					R.raw.sample_menu));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		CommunicationManager cm = CommunicationManager.getInstance();
+		cm.setContext(mContext);
+		cm.setRemoteHost(address);
+		Request req = RequestHandler.buildRequest(new HashMap<String, String>());
+		req.addAuthentication("admin", apikey);
+		doc = cm.sendRequest("/api-bin/action_menu.py", req);
+			
 		XML2Menu.getInstance(doc);
 		return XML2Menu.getInstance(null).getMenuList();
 
@@ -113,32 +119,37 @@ public class MainActivity extends Activity {
 		}
 	}//generate view
 	
-    private class RequestFromMenu extends AsyncTask<MenuElement, String, String> {
+    private class RequestMenu extends AsyncTask<Menu, String, String> {
 
-		
+    	private ArrayList<MenuElement> menuList;
+    	private Menu menu;
+		private String message = "";
 		@Override
         protected void onPostExecute(String result) {
-           
+			if (this.isCancelled()) {
+				Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
+				return;
+			}
+           for (MenuElement me : menuList)
+           {
+        	   menu.add(me.getLabel());
+           }
         }
 
         @Override
         protected void onPreExecute() {}
 
 		@Override
-		protected String doInBackground(MenuElement... menuElement) {
-			MenuElement me = menuElement[0];
-			String url = me.getUrl();
-			String uri = me.getUri();
-			String value = me.getValue();
+		protected String doInBackground(Menu... menus) {
+			menu = menus[0];
 			InputStream is = null;
 			try {	
-				HashMap<String, String> map = new HashMap<String, String>();
-				Request req = RequestHandler.buildRequest(map);
-				map.put(uri, value);
-				CommunicationManager cm = CommunicationManager.getInstance();
-				req.addAuthentication(username, apikey);
+				 menuList = getMenuList();
+				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
+				this.cancel(true);
+				this.message  = e.toString();
 				e.printStackTrace();
 			}
 			
