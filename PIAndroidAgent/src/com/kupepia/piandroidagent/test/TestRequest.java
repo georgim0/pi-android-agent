@@ -16,6 +16,7 @@ import android.test.AndroidTestCase;
 import com.kupepia.piandroidagent.R;
 import com.kupepia.piandroidagent.requests.Request;
 import com.kupepia.piandroidagent.requests.RequestHandler;
+import com.kupepia.piandroidagent.utils.XMLUtils;
 
 public class TestRequest extends AndroidTestCase {
 	
@@ -55,4 +56,39 @@ public class TestRequest extends AndroidTestCase {
 			assertTrue(condition1 || condition2);
 		}
 	}
+	
+	public void testCreateRequest() throws Throwable {
+	
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("uri://1", "1");
+		map.put("uri://2", "2");
+		Request req = RequestHandler.buildRequest(map);
+		Document reqDoc = req.getDocument();
+		InputStream xmlInputStream = this.mContext.getResources()
+				.openRawResource(R.raw.sample_request_template);
+		Document templateDoc = XMLUtils.stream2Document(xmlInputStream);
+		String xml = XMLUtils.Document2String(templateDoc);
+		NodeList pairs = reqDoc.getElementsByTagName("pair");
+		for (int i = 0; i < pairs.getLength(); i++)
+		{
+			Node pairNode = pairs.item(i);
+			NodeList children = pairNode.getChildNodes();
+			String keyFromReq = null;
+			String valueFromReq = null;
+			for (int j = 0; j < children.getLength(); j++)
+			{
+				Node childNode = children.item(j);
+				if (childNode.getNodeName().equals("key"))
+					keyFromReq = childNode.getTextContent();
+				else if (childNode.getNodeName().equals("value"))
+					valueFromReq = childNode.getTextContent();
+			}
+			boolean condition1 = keyFromReq.equals("uri://1") && 
+					valueFromReq.equals("1");
+			boolean condition2 = keyFromReq.equals("uri://2") && 
+					valueFromReq.equals("2");
+			assertTrue(condition1 || condition2);
+		}
+	}
+	
 }

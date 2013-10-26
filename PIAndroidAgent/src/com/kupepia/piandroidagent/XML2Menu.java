@@ -43,8 +43,9 @@ public class XML2Menu {
 						.getTextContent();
 				String value = eElement.getElementsByTagName("value").item(0)
 						.getTextContent();
-
-				this.menuList.add(new MenuElement(uri, labelContent, value));
+				String url = eElement.getElementsByTagName("url").item(0)
+						.getTextContent();
+				this.menuList.add(new MenuElement(uri, labelContent, value, url));
 
 			}// if
 

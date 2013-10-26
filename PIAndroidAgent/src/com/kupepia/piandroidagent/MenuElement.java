@@ -4,11 +4,12 @@ public class MenuElement {
 	private String uri;
 	private String label;
 	private String value;
-
-	public MenuElement(String uriIn, String labelIn, String valueIn) {
+	private String url;
+	public MenuElement(String uriIn, String labelIn, String valueIn, String url) {
 		this.uri = uriIn;
 		this.label = labelIn;
 		this.value = valueIn;
+		this.url = url;
 	}
 
 	public String getUri() {
@@ -37,5 +38,13 @@ public class MenuElement {
 	
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }

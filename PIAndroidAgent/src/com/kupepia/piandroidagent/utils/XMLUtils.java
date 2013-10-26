@@ -40,11 +40,19 @@ public class XMLUtils {
 	public static Document stream2Document(InputStream xmlInputStream) throws 
 		ParserConfigurationException, SAXException, IOException
 	{
-
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		Document doc = dBuilder.parse(xmlInputStream);
-		return doc;
+		try {
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(xmlInputStream);
+			return doc;
+		}
+		finally {
+			try {
+				xmlInputStream.close();
+			}
+			catch (IOException e)
+			{}
+		}
 	}
 	
 	public static String Document2String(Document doc) {

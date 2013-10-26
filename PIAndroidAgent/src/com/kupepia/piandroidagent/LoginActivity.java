@@ -6,6 +6,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -38,7 +41,7 @@ public class LoginActivity extends Activity {
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private UserLoginTask mAuthTask = null;
-
+	private Context mContext = null;
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
 	private String mPassword;
@@ -49,6 +52,7 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +82,7 @@ public class LoginActivity extends Activity {
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
-
+		this.mContext = this;
 		findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
@@ -115,7 +119,7 @@ public class LoginActivity extends Activity {
 
 		boolean cancel = false;
 		View focusView = null;
-
+		focusView = mEmailView;
 		// Check for a valid password.
 		if (TextUtils.isEmpty(mPassword)) {
 			mPasswordView.setError(getString(R.string.error_field_required));
@@ -127,17 +131,7 @@ public class LoginActivity extends Activity {
 			cancel = true;
 		}
 		
-		//try to sign in
-		CommunicationManager cm = CommunicationManager.getInstance();
-		cm.setRemoteHost(mEmail);
-		int returnCode = -1;
-		try {
-			returnCode = cm.signIn(mPassword);
-		}
-		catch (Exception e)
-		{
-			cancel = true;
-		}
+		
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
@@ -198,6 +192,7 @@ public class LoginActivity extends Activity {
 	 * the user.
 	 */
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+		private String message;
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
@@ -217,7 +212,30 @@ public class LoginActivity extends Activity {
 				}
 			}
 
-			// TODO: register the new account here.
+			//try to sign in
+			CommunicationManager cm = CommunicationManager.getInstance();
+			cm.setRemoteHost(mEmail);
+			cm.setContext(mContext);
+			int returnCode = -1;
+			try {
+				returnCode = cm.signIn(mPassword);
+				if (returnCode == 0)
+				{
+					message = "Login is succesfull";
+				}
+				else
+				{
+					message = "Login failed: " + returnCode;
+					this.cancel(true);
+				}
+					
+			}
+			catch (Exception e)
+			{
+				message = e.toString();
+				this.cancel(true);
+
+			}
 			return true;
 		}
 
@@ -227,6 +245,11 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 
 			if (success) {
+				Toast.makeText(mContext, "Handshake with server: Success", Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(mContext, MainActivity.class);
+				intent.putExtra("username", mEmail);
+				intent.putExtra("apikey", mPassword);
+				startActivity(intent);
 				finish();
 			} else {
 				mPasswordView
