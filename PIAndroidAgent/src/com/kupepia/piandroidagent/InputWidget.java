@@ -52,7 +52,5 @@ public  abstract class InputWidget extends Widget {
 	{
 		this.labelContent = content;
 	}
-	
-	
 
 }

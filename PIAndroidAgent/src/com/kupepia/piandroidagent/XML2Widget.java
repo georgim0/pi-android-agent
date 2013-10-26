@@ -7,7 +7,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
 public class XML2Widget {
 
 	private ArrayList<Widget> widgets;
@@ -26,12 +25,14 @@ public class XML2Widget {
 
 					Element eElement = (Element) nNode;
 					String labelContent = eElement
-							.getElementsByTagName("label").item(0).getTextContent();
-					String uri = eElement.getElementsByTagName("uri").item(0).getTextContent();
+							.getElementsByTagName("label").item(0)
+							.getTextContent();
+					String uri = eElement.getElementsByTagName("uri").item(0)
+							.getTextContent();
 
 					String attributeType = eElement.getAttribute("type");
 					String attributeHeading = eElement.getAttribute("heading");
-					if (attributeHeading != null){
+					if (attributeHeading != null) {
 						attributeType.concat("_h" + attributeHeading);
 					}
 					Widget widget = null;
@@ -46,10 +47,11 @@ public class XML2Widget {
 			}
 
 			NodeList nList2 = doc.getElementsByTagName("submit");
-			Node nNode = nList2.item(0);
 
-			// System.out.println("\nCurrent Element :" + nNode.getNodeName());
-			Element eElement = (Element) nNode;
+			if (nList2 != null) {
+				Node nNode = nList2.item(0);
+				Element eElement = (Element) nNode;
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
