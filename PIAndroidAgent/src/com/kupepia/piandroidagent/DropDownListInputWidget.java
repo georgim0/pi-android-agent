@@ -10,8 +10,8 @@ import android.widget.Spinner;
 
 public class DropDownListInputWidget extends InputWidget {
 
-	ArrayList<String> list = new ArrayList<String>();
-
+	private ArrayList<String> list = new ArrayList<String>();
+	private Spinner spinner;
 	public DropDownListInputWidget(String label, String uri) {
 		super(label, uri);
 	}
@@ -20,7 +20,7 @@ public class DropDownListInputWidget extends InputWidget {
 	
 	@Override
 	public View createMe(Context c) {
-		Spinner spinner = new Spinner(c);		
+		spinner = new Spinner(c);		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(c, android.R.layout.simple_spinner_item,list);
 		spinner.setAdapter(adapter);
 		
@@ -30,6 +30,13 @@ public class DropDownListInputWidget extends InputWidget {
 	public void addEntry(String entry)
 	{
 		list.add(entry);
+	}
+
+
+
+	@Override
+	public String getValue() {
+		return this.spinner.getSelectedItem().toString();
 	}
 
 }

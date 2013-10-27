@@ -10,7 +10,7 @@ public  abstract class InputWidget extends Widget {
 
 	private String labelContent;
 	private final String uri;
-	
+	private View inputWidget;
 	public InputWidget(String label, String uri)
 	{
 		this.labelContent = label;
@@ -33,7 +33,7 @@ public  abstract class InputWidget extends Widget {
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		View label = createLabel(c);
 		label.setId(label.hashCode());
-		View inputWidget = this.createMe(c);
+		inputWidget = this.createMe(c);
 		inputWidget.setId(inputWidget.hashCode());
 		rl.addView(label, lp);
 		lp = new RelativeLayout.LayoutParams(
@@ -53,6 +53,5 @@ public  abstract class InputWidget extends Widget {
 		this.labelContent = content;
 	}
 	
-	
-
+	public abstract String getValue();
 }

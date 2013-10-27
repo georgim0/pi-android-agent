@@ -28,27 +28,10 @@ public class Request {
 		NodeList pairNodes = xmlDocument.getElementsByTagName("pair");
 		for (int i = 0; i < pairNodes.getLength(); i++)
 		{
-			Node pairNode = pairNodes.item(i);
-			NodeList keyValueNodes = pairNode.getChildNodes();
-			String nodeValue = null;
-			String key = null;
-			Node valueNode = null;
-			for (int j = 0; j < keyValueNodes.getLength(); j++)
-			{
-				String tagName = keyValueNodes.item(j).getNodeName();
-				nodeValue = keyValueNodes.item(j).getTextContent();
-				if (tagName.equals("key"))
-				{
-					key = keyValueNodes.item(j).getTextContent(); 
-					nodeValue = keyValuePair.get(key);
-				}
-				else if (tagName.equals("value"))
-					valueNode = keyValueNodes.item(j);
-			}//for j
-			
-			if (keyValuePair.containsKey(key))
-				valueNode.setTextContent(keyValuePair.put(key, nodeValue));
-		
+			Element el_pair = (Element) pairNodes.item(i);
+			Element el_key = (Element) el_pair.getElementsByTagName("key").item(0);
+			Element el_value = (Element) el_pair.getElementsByTagName("value").item(0);
+			el_value.setTextContent(keyValuePair.get(el_key.getTextContent()));
 		}//for i
 		
 	}//fillRequest
@@ -101,6 +84,20 @@ public class Request {
 			el_pair.appendChild(el_value);
 			rootElement.appendChild(el_pair);
 		}//for
+		d.appendChild(rootElement);
+		return new Request(d);
+	}
+	
+	public static Request createFormatRequest(String file) throws ParserConfigurationException
+	{
+		DocumentBuilder db = 
+				DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		Document d = db.newDocument();
+		Element rootElement = d.createElement("request");
+		rootElement.setAttribute("version", "1.0");
+		Element el_format = d.createElement("format");
+		el_format.setTextContent(file);
+		rootElement.appendChild(el_format);
 		d.appendChild(rootElement);
 		return new Request(d);
 	}
