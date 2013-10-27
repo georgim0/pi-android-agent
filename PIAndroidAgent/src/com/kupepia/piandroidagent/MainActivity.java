@@ -50,10 +50,9 @@ public class MainActivity extends Activity {
 		CommunicationManager cm = CommunicationManager.getInstance();
 		cm.setContext(this);
 		Intent intent = this.getIntent();
-		//address = intent.getStringExtra("address");
-		//apikey = intent.getStringExtra("apikey");
-		address = "https://192.168.56.101:8005";
-		apikey = "330zuVOxshH.Q";
+		address = intent.getStringExtra("address");
+		apikey = intent.getStringExtra("apikey");
+		
 		widgetsOnScreenListView = new ListView(this);
 		mainRelativeLayout = (RelativeLayout)this.findViewById(R.id.main_relative_layout);
 	}
