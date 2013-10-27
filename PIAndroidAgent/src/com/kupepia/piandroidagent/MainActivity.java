@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -52,10 +54,10 @@ public class MainActivity extends Activity {
 		CommunicationManager cm = CommunicationManager.getInstance();
 		cm.setContext(this);
 		Intent intent = this.getIntent();
-		/*address = intent.getStringExtra("address");
-		apikey = intent.getStringExtra("apikey");*/
-		address = "https://192.168.56.101:8005";
-		apikey = "27WS0aRgGyf1c";
+		address = intent.getStringExtra("address");
+		apikey = intent.getStringExtra("apikey");
+		widgetsOnScreenListView = new ListView(this);
+		mainRelativeLayout = (RelativeLayout)this.findViewById(R.id.main_relative_layout);
 	}
 
 	private void showMsg(String msg) {
@@ -144,13 +146,17 @@ public class MainActivity extends Activity {
     	private Menu menu;
 		private String message = "";
 		private ArrayList<Widget> widgets;
+		
 		@Override
         protected void onPostExecute(String result) {
 			if (this.isCancelled()) {
 				Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
 				return;
 			}
-           
+			
+			ListAdapter adapter = new WidgetListAdapter(widgets, mContext);
+			widgetsOnScreenListView.setAdapter(adapter);
+	        mainRelativeLayout.addView(widgetsOnScreenListView);
         }
 
         @Override

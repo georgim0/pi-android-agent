@@ -10,20 +10,26 @@ import android.widget.Spinner;
 
 public class DropDownListInputWidget extends InputWidget {
 
+	ArrayList<String> list = new ArrayList<String>();
+
 	public DropDownListInputWidget(String label, String uri) {
 		super(label, uri);
 	}
 
+	
+	
 	@Override
 	public View createMe(Context c) {
-		Spinner spinner = new Spinner(c);
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("no1");
-		list.add("no2");		
+		Spinner spinner = new Spinner(c);		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(c, android.R.layout.simple_spinner_item,list);
 		spinner.setAdapter(adapter);
 		
 		return spinner;
+	}
+	
+	public void addEntry(String entry)
+	{
+		list.add(entry);
 	}
 
 }

@@ -2,7 +2,7 @@ package com.kupepia.piandroidagent;
 
 public enum WidgetType {
 	LISTVIEW("listview"), CHECKBOX("checkbox"), TABLE("table"), 
-	DROPDOWNLIST("dropdownlist"), INPUTBOX("inputbox"), 
+	DROPDOWNLIST("droplist"), INPUTBOX("inputbox"), 
 	TEXTVIEW("textview"), TEXTVIEW_H1("textview_h1"), 
 	TEXTVIEW_H2("textview_h2"), TEXTVIEW_H3("textview_h3"), 
 	TEXTVIEW_H4("textview_h4"), TEXTVIEW_H5("textview_h5"), 

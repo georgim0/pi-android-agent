@@ -32,8 +32,8 @@ public class XML2Widget {
 
 					String attributeType = eElement.getAttribute("type");
 					String attributeHeading = eElement.getAttribute("heading");
-					if (attributeHeading != null) {
-						attributeType.concat("_h" + attributeHeading);
+					if (attributeHeading != null && attributeHeading.length() > 0) {
+						attributeType = attributeType.concat("_h" + attributeHeading);
 					}
 					Widget widget = null;
 					if (labelContent.length() > 0)
@@ -41,6 +41,17 @@ public class XML2Widget {
 								attributeType, uri, labelContent);
 					else
 						widget = WidgetFactory.createWidget(attributeType, uri);
+						
+					if (widget instanceof DropDownListInputWidget)
+					{
+						Node entriesNode = eElement.getElementsByTagName("entries").item(0);
+						NodeList entriesNodeList = entriesNode.getChildNodes();
+						for (int i = 0; i < entriesNodeList.getLength(); i++)
+						{
+							Node node = entriesNodeList.item(i);
+							((DropDownListInputWidget)widget).addEntry(node.getTextContent());
+						}
+					}
 					widgets.add(widget);
 
 				}// if

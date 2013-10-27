@@ -195,22 +195,6 @@ public class LoginActivity extends Activity {
 		private String message;
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-
-			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
-			}
-
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
-			}
 
 			//try to sign in
 			CommunicationManager cm = CommunicationManager.getInstance();
@@ -247,7 +231,7 @@ public class LoginActivity extends Activity {
 			if (success) {
 				Toast.makeText(mContext, "Handshake with server: Success", Toast.LENGTH_SHORT).show();
 				Intent intent = new Intent(mContext, MainActivity.class);
-				intent.putExtra("username", mEmail);
+				intent.putExtra("address", mEmail);
 				intent.putExtra("apikey", mPassword);
 				startActivity(intent);
 				finish();
