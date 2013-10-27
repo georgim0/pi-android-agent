@@ -2,6 +2,7 @@ package com.kupepia.piandroidagent;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.CheckBox;
 
 public class CheckboxInputWidget extends InputWidget {
 
@@ -13,7 +14,8 @@ public class CheckboxInputWidget extends InputWidget {
 	@Override
 	public View createMe(Context c) {
 		// TODO Auto-generated method stub
-		return null;
+        CheckBox cb = new CheckBox(c);
+		return cb;
 	}
 
 }

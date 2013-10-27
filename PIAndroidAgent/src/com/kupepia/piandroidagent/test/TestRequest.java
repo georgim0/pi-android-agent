@@ -66,7 +66,7 @@ public class TestRequest extends AndroidTestCase {
 		Request req = RequestHandler.buildRequest(map);
 		Document reqDoc = req.getDocument();
 		InputStream xmlInputStream = this.mContext.getResources()
-				.openRawResource(R.raw.sample_request_template);
+				.openRawResource(R.raw.sample_request);
 		Document templateDoc = XMLUtils.stream2Document(xmlInputStream);
 		String xml = XMLUtils.Document2String(templateDoc);
 		NodeList pairs = reqDoc.getElementsByTagName("pair");
