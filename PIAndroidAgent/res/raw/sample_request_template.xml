@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<request>
+	<pair>
+		<key>uri://1</key>
+		<value>1</value>
+	</pair>
+	<pair>
+		<key>uri://2</key>
+		<value>2</value>
+	</pair>
+</request>
