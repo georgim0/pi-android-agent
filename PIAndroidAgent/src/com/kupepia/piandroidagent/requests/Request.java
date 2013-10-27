@@ -95,8 +95,8 @@ public class Request {
 			Element el_pair = d.createElement("pair");
 			Element el_key = d.createElement("key");
 			Element el_value = d.createElement("value");
-			el_value.setNodeValue(pairs.get(key));
-			el_key.setNodeValue(key);
+			el_value.setTextContent(pairs.get(key));
+			el_key.setTextContent(key);
 			el_pair.appendChild(el_key);
 			el_pair.appendChild(el_value);
 			rootElement.appendChild(el_pair);

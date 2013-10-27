@@ -38,8 +38,10 @@ public class MainActivity extends Activity {
 	private RelativeLayout mainRelativeLayout = null;
 	private ListView widgetsOnScreenListView = null;
 	private Context mContext;
-	String address = "";
-	String apikey = "";
+	private ArrayList<MenuElement> menuList;
+
+	private String address = "";
+	private String apikey = "";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,40 +90,16 @@ public class MainActivity extends Activity {
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
-
-		String label = item.getTitle().toString();
-		MenuElement selectedMenuElement = XML2Menu.getInstance(null)
-				.getSelected(label);
-
-		showMsg("label: " + selectedMenuElement.getLabel() + ", uri: "
-				+ selectedMenuElement.getUri() + ", value: "
-				+ selectedMenuElement.getValue());
+		if (item.getOrder() < this.menuList.size())
+		{
+			MenuElement menuElement = this.menuList.get(item.getOrder());
+			new RequestView().execute(menuElement);
+		}
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void generateView(Document doc)
-	{
-		mainRelativeLayout.removeAllViews();
-		widgetsOnScreenListView = new ListView(this);
-		XML2Widget xml2Widget = null;
-		try {
-			xml2Widget = new XML2Widget(doc);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// View view = xml2Widget.getView();
-		if (xml2Widget != null) {
-			ArrayList<Widget> wList = xml2Widget.getWidgets();
-			WidgetListAdapter wla = new WidgetListAdapter(wList, this);
-			this.widgetsOnScreenListView.setAdapter(wla);
-			mainRelativeLayout.addView(this.widgetsOnScreenListView);
-		}
-	}//generate view
-	
     private class RequestMenu extends AsyncTask<Menu, String, String> {
 
-    	private ArrayList<MenuElement> menuList;
     	private Menu menu;
 		private String message = "";
 		@Override
@@ -146,6 +124,56 @@ public class MainActivity extends Activity {
 			try {	
 				 menuList = getMenuList();
 				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				this.cancel(true);
+				this.message  = e.toString();
+				e.printStackTrace();
+			}
+			
+			
+			return null;
+		}
+    	
+    }
+    
+    
+    
+    private class RequestView extends AsyncTask<MenuElement, String, String> {
+
+    	private Menu menu;
+		private String message = "";
+		private ArrayList<Widget> widgets;
+		@Override
+        protected void onPostExecute(String result) {
+			if (this.isCancelled()) {
+				Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
+				return;
+			}
+           
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+		@Override
+		protected String doInBackground(MenuElement... menuElements) {
+			InputStream is = null;
+			MenuElement menuElement = menuElements[0];
+			String url = menuElement.getUrl();
+			String uri = menuElement.getUri();
+			String value = menuElement.getValue();
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put(uri, value);
+			
+			try {	
+				CommunicationManager cm = CommunicationManager.getInstance();
+				Request request = RequestHandler.buildRequest(map);
+				request.addAuthentication("admin", apikey);
+				Document doc = cm.sendRequest(url, request);
+				String xmlstring = XMLUtils.Document2String(doc);
+				XML2Widget xml2Widget = new XML2Widget(doc);
+				widgets = xml2Widget.getWidgets();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				this.cancel(true);

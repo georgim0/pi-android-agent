@@ -48,7 +48,6 @@ public class XML2Widget {
 			NodeList nList2 = doc.getElementsByTagName("submit");
 			Node nNode = nList2.item(0);
 
-			// System.out.println("\nCurrent Element :" + nNode.getNodeName());
 			Element eElement = (Element) nNode;
 
 		} catch (Exception e) {
