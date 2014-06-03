@@ -1,6 +1,7 @@
 package com.kupepia.piandroidagent;
 
 import com.kupepia.piandroidagent.requests.CommunicationManager;
+import com.kupepia.piandroidagent.requests.Response;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -201,10 +202,11 @@ public class LoginActivity extends Activity {
 			int returnCode = -1;
 			try {
 			    CommunicationManager cm = CommunicationManager.getInstance();
-	            cm.setRemoteHost(mEmail);
-	            cm.setContext(mContext);
-				//returnCode = cm.signIn(mPassword);
-				if (returnCode == 0)
+	            cm.setRemoteHost("https://82.102.116.227:8003");
+	            String password = "dsLTvzeP"; //TODO
+	            Response response = cm.signIn(password);
+	            returnCode = response.getCode();
+				if (returnCode == 200)
 				{
 					message = "Login is succesfull";
 				}

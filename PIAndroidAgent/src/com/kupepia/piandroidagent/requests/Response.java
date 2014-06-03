@@ -1,21 +1,23 @@
 package com.kupepia.piandroidagent.requests;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 public class Response {
     private int code;
-    private JSONObject body;
+    private JSONTokener body;
     
-    protected Response(JSONObject body, int code) {
+    protected Response(JSONTokener json, int code) {
         this.code = code;
-        this.body = body;
+        this.body = json;
     }
     
     public int getCode() {
         return this.code;
     }
     
-    public JSONObject getBody() {
-        return this.body;
+    public Object getBody() throws JSONException {
+        return this.body.nextValue();
     }
 }
