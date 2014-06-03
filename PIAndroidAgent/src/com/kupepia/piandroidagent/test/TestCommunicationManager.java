@@ -12,92 +12,50 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import android.os.StrictMode;
 import android.test.AndroidTestCase;
 
 import com.kupepia.piandroidagent.requests.CommunicationManager;
+import com.kupepia.piandroidagent.requests.Response;
 
 public class TestCommunicationManager extends AndroidTestCase {
-
-
-
-	public void testCreateRequestDoc() {
-		CommunicationManager cm = CommunicationManager.getInstance();
-		Document doc = cm.createRequestDoc("hello");
-
-		TransformerFactory tf = TransformerFactory.newInstance();
-		Transformer transformer;
-		try {
-			transformer = tf.newTransformer();
-
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
-					"yes");
-			StringWriter writer = new StringWriter();
-			transformer.transform(new DOMSource(doc), new StreamResult(writer));
-			String output = writer.getBuffer().toString()
-					.replaceAll("\n|\r", "");
-
-			String expectedOutput = "<request type=\"authentication\">"
-						+ "<username>admin</username>" 
-						+ "<api-key>hello</api-key>"
-						+ "</request>";
-			
-			assertTrue(output.equals(expectedOutput));
-		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public void testGetResponseCode(){
-		CommunicationManager cm = CommunicationManager.getInstance();
-		Document doc = null;
-		try {
-			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-			
-			//create <response>
-			Element root = doc.createElement("pi-api");
-			doc.appendChild(root);
-			root.setAttribute("version", "1.0");
-			
-			//create <response>
-			Element response = doc.createElement("response");
-			root.appendChild(response);
-			
-			//create <code>
-			Element username = doc.createElement("code");
-			root.appendChild(username);
-			
-			//set username = admin
-			username.setTextContent("0");
-			
-			int code = cm.getResponseCode(doc);
-			
-			assertTrue(code==0);
-
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
 	
 	public void testSignIn(){
-		CommunicationManager cm = CommunicationManager.getInstance();
-		cm.setRemoteHost("https://192.168.56.101:8005");
-		cm.setContext(this.getContext());
-		try {
-			int responseCode = cm.signIn("17g5HwTpKfVjM");
-			assertTrue(responseCode >= 0);
+	    try {
+	    
+    	    CommunicationManager cm = CommunicationManager.getInstance();
+    		cm.setRemoteHost("https://192.168.2.10:8003");
+    		cm.setContext(this.getContext());
+    		String password = ""; //TODO
+			Response response = cm.signIn(password);
+			assertEquals(200, response.getCode());
 		}
 		catch (Exception e)
 		{
 			fail();
 		}
+	}
+	
+	public void test_request() {
+	    try {
+	        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+	        StrictMode.setThreadPolicy(policy);
+	        String url = "https://www.google.com";
+            CommunicationManager cm = CommunicationManager.getInstance();
+            //localTrustStore.load(in, TRUSTSTORE_PASSWORD.toCharArray());
+            Response r = cm.sendRequest(url);
+            assertEquals(200, r.getCode());
+            url = "https://192.168.2.10:8003";
+            r = cm.sendRequest(url);
+            assertEquals(200, r.getCode());
+            
+	    }
+	    catch (Exception e) {
+	        fail();
+	    }
 	}
 }

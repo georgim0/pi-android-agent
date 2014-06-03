@@ -197,12 +197,13 @@ public class LoginActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 
 			//try to sign in
-			CommunicationManager cm = CommunicationManager.getInstance();
-			cm.setRemoteHost(mEmail);
-			cm.setContext(mContext);
+			
 			int returnCode = -1;
 			try {
-				returnCode = cm.signIn(mPassword);
+			    CommunicationManager cm = CommunicationManager.getInstance();
+	            cm.setRemoteHost(mEmail);
+	            cm.setContext(mContext);
+				//returnCode = cm.signIn(mPassword);
 				if (returnCode == 0)
 				{
 					message = "Login is succesfull";
@@ -229,12 +230,12 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 
 			if (success) {
-				Toast.makeText(mContext, "Handshake with server: Success", Toast.LENGTH_SHORT).show();
+				/*Toast.makeText(mContext, "Handshake with server: Success", Toast.LENGTH_SHORT).show();
 				Intent intent = new Intent(mContext, MainActivity.class);
 				intent.putExtra("address", mEmail);
 				intent.putExtra("apikey", mPassword);
 				startActivity(intent);
-				finish();
+				finish();*/
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
