@@ -1,12 +1,5 @@
 package com.kupepia.piandroidagent.test;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -22,7 +15,7 @@ public class TestFeatures extends AndroidTestCase {
         try {
             CommunicationManager cm = CommunicationManager.getInstance();
             
-            cm.setRemoteHost("https://82.102.116.227:8003");
+            cm.setRemoteHost("https://192.168.2.10:8003");
             
             cm.signIn("");
             

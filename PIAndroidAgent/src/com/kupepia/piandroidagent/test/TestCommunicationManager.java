@@ -16,7 +16,7 @@ public class TestCommunicationManager extends AndroidTestCase {
 	    try {
 	    
     	    CommunicationManager cm = CommunicationManager.getInstance();
-    		cm.setRemoteHost("https://82.102.116.227:8003");
+    		cm.setRemoteHost("https://192.168.2.10:8003");
     		String password = ""; //TODO
 			Response response = cm.signIn(password);
 			assertEquals(200, response.getCode());
@@ -56,7 +56,7 @@ public class TestCommunicationManager extends AndroidTestCase {
             Response r = cm.sendRequest(url);
             assertEquals(200, r.getCode());
             
-            url = "https://82.102.116.227:8003";
+            url = "https://192.168.2.10:8003";
             r = cm.sendRequest(url);
             assertEquals(200, r.getCode());
             
