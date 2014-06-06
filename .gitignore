@@ -1,5 +1,4 @@
 *.class
 *.jar
 PIAndroidAgent/bin/
-R.java
-PIAndroidAgent/gen/com/kupepia/piandroidagent/R.java
+PIAndroidAgent/gen/
