@@ -35,7 +35,7 @@ public class TestCommunicationManager extends AndroidTestCase {
 			
 			String otherpassword = "123456";
 			try {
-    			response = cm.signIn(otherpassword);
+    			response = cm.signIn(password);
     			
 			}
 			catch (FileNotFoundException e) {

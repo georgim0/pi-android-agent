@@ -10,7 +10,7 @@ import android.test.AndroidTestCase;
 
 public class TestFeatures extends AndroidTestCase {
     private final String password = "";
-    
+     
     public void test_file_manager_path_request() {
         String path="/home/pi/";
         try {
