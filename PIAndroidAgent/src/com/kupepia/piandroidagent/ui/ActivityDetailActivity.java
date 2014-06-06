@@ -1,4 +1,6 @@
-package com.kupepia.piandroidagent;
+package com.kupepia.piandroidagent.ui;
+
+import com.kupepia.piandroidagent.R;
 
 import android.content.Intent;
 import android.os.Bundle;

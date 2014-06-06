@@ -1,7 +1,7 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_list"
-    android:name="com.kupepia.piandroidagent.ActivityListFragment"
+    android:name="com.kupepia.piandroidagent.ui.ActivityListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"

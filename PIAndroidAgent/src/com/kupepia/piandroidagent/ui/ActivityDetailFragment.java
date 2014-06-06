@@ -1,13 +1,15 @@
-package com.kupepia.piandroidagent;
-
+package com.kupepia.piandroidagent.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import com.kupepia.piandroidagent.dummy.DummyContent;
+import com.kupepia.piandroidagent.R;
+import com.kupepia.piandroidagent.dummy.AppContent;
+import com.kupepia.piandroidagent.features.FeatureUI;
 
 /**
  * A fragment representing a single Activity detail screen. This fragment is
@@ -24,7 +26,7 @@ public class ActivityDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private FeatureUI mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -41,23 +43,31 @@ public class ActivityDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(
+            mItem = AppContent.ITEM_MAP.get(getArguments().getString(
                     ARG_ITEM_ID));
+            
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+        
         View rootView = inflater.inflate(R.layout.fragment_activity_detail,
                 container, false);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.activity_detail))
-                    .setText(mItem.content);
+            RelativeLayout rl_view = ((RelativeLayout) rootView.findViewById(R.id.activity_detail_rl));
+            rl_view.removeAllViews();
+            try {
+                mItem.activate(rl_view);
+            } catch (Exception e) {
+                Toast.makeText(container.getContext(), e.toString(), Toast.LENGTH_LONG).show();
+            }
         }
-
+        this.getActivity().setTitle(mItem.getID());
+        
         return rootView;
     }
 }

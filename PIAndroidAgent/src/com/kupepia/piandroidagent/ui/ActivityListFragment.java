@@ -1,4 +1,4 @@
-package com.kupepia.piandroidagent;
+package com.kupepia.piandroidagent.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,7 +7,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.kupepia.piandroidagent.dummy.DummyContent;
+import com.kupepia.piandroidagent.dummy.AppContent;
+import com.kupepia.piandroidagent.features.FeatureUI;
 
 /**
  * A list fragment representing a list of Activities. This fragment also
@@ -71,9 +72,9 @@ public class ActivityListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
+        setListAdapter(new ArrayAdapter<FeatureUI>(getActivity(),
                 android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1, DummyContent.ITEMS));
+                android.R.id.text1, AppContent.ITEMS));
     }
 
     @Override
@@ -116,7 +117,8 @@ public class ActivityListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        
+        mCallbacks.onItemSelected(AppContent.ITEMS.get(position).getID());
     }
 
     @Override
