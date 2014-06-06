@@ -38,10 +38,9 @@ public class CommunicationManager {
 	    
 	}
 	
-	public static CommunicationManager getInstance() throws KeyManagementException, UnrecoverableKeyException, 
-	        NoSuchAlgorithmException, KeyStoreException, CertificateException, IOException
-	{
-		if (cm == null)
+	public static CommunicationManager getInstance() {
+	
+	    if (cm == null)
 		{
 			cm = new CommunicationManager();
 		}
@@ -71,8 +70,7 @@ public class CommunicationManager {
         
 	}
 	
-	public Response sendRequest(String location, HttpsURLConnection connection) throws ClientProtocolException, IOException, KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, CertificateException   {
-	
+	public Response sendRequest(String location, HttpsURLConnection connection) throws IOException {
 	    String userpass = USERNAME + ":" + password;
         String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
         connection.setRequestProperty ("Authorization", basicAuth);
