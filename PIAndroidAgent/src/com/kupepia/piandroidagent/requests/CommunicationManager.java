@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -17,6 +18,7 @@ import java.security.cert.CertificateException;
 import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.http.client.ClientProtocolException;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -58,7 +60,7 @@ public class CommunicationManager {
 		return this.ip;
 	}
 	
-	public Response sendRequest(String location) throws IOException, KeyManagementException, NoSuchAlgorithmException {
+	public Response sendRequest(String location) throws IOException, KeyManagementException, NoSuchAlgorithmException, JSONException {
 	    
 	    URL url = new URL(this.ip + location);
 	    
@@ -70,7 +72,7 @@ public class CommunicationManager {
         
 	}
 	
-	public Response sendRequest(String location, HttpsURLConnection connection) throws IOException {
+	public Response sendRequest(String location, HttpsURLConnection connection) throws IOException, JSONException {
 	    String userpass = USERNAME + ":" + password;
         String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
         connection.setRequestProperty ("Authorization", basicAuth);
@@ -82,18 +84,21 @@ public class CommunicationManager {
 	    StringBuilder responseStrBuilder = new StringBuilder();
 
 	    String inputStr;
+	    responseStrBuilder.append("[");
 	    while ((inputStr = streamReader.readLine()) != null)
 	        responseStrBuilder.append(inputStr);
+	    responseStrBuilder.append("]");
+        
 	    streamReader.close();
-	    JSONTokener json = null;
-	    json = new JSONTokener(responseStrBuilder.toString());
+	    JSONArray json = null;
+	    json = new JSONArray(responseStrBuilder.toString());
 	    
 	    Response res = new Response(json, connection.getResponseCode());
 	    return res;
 	    
 	}
 	
-	public Response signIn(final String password) throws ClientProtocolException, IOException, KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, CertificateException  {
+	public Response signIn(final String password) throws IOException, KeyManagementException, NoSuchAlgorithmException, JSONException  {
 
 	    String location = ip + SIGN_IN_LOCATION;
 	    
