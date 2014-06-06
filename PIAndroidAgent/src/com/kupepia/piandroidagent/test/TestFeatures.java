@@ -9,15 +9,16 @@ import com.kupepia.piandroidagent.requests.Response;
 import android.test.AndroidTestCase;
 
 public class TestFeatures extends AndroidTestCase {
-
+    private final String password = "";
+    
     public void test_file_manager_path_request() {
-        String path="/home";
+        String path="/home/pi/";
         try {
             CommunicationManager cm = CommunicationManager.getInstance();
             
             cm.setRemoteHost("https://192.168.2.10:8003");
             
-            cm.signIn("");
+            cm.signIn(password);
             
             Response r = cm.sendRequest("/cgi-bin/toolkit/file_manager.py?path=/home");
             assertEquals(200, r.getCode());

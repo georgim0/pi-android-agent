@@ -11,14 +11,14 @@ import com.kupepia.piandroidagent.requests.CommunicationManager;
 import com.kupepia.piandroidagent.requests.Response;
 
 public class TestCommunicationManager extends AndroidTestCase {
-	
+    private final String password = "";
+    
 	public void testSignIn(){
 	    try {
 	    
     	    CommunicationManager cm = CommunicationManager.getInstance();
     		cm.setRemoteHost("https://192.168.2.10:8003");
-    		String password = ""; //TODO
-			Response response = cm.signIn(password);
+    		Response response = cm.signIn(password);
 			assertEquals(200, response.getCode());
 			
 			Object responseBody = response.getBody();
@@ -33,9 +33,9 @@ public class TestCommunicationManager extends AndroidTestCase {
 			
 			assertTrue(js.getInt("mem") > 0);
 			
-			password = "123456";
+			String otherpassword = "123456";
 			try {
-    			response = cm.signIn(password);
+    			response = cm.signIn(otherpassword);
     			
 			}
 			catch (FileNotFoundException e) {
