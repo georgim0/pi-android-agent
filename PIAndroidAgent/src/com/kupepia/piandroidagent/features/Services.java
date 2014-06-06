@@ -2,10 +2,7 @@ package com.kupepia.piandroidagent.features;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +16,8 @@ import com.kupepia.piandroidagent.requests.Response;
 public class Services implements Feature {
 
     private static final String DATA_QUERY = "/cgi-bin/toolkit/live_info.py?cmd=services";
-    
+    private static final String ACTIVATE_SERVICE_QUERY = "/cgi-bin/toolkit/live_info.py?cmd=edit_service&param2=on&param1=";
+    private static final String DEACTIVATE_SERVICE_QUERY = "/cgi-bin/toolkit/live_info.py?cmd=edit_service&param2=off&param1=";
     Response response = null;
     Map<String, Boolean> result;
     
@@ -56,6 +54,25 @@ public class Services implements Feature {
     public Map<String, Boolean> getServices() {
         
         return result;
+    }
+
+    public Response activateService(String serviceName) throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+        String query = ACTIVATE_SERVICE_QUERY + serviceName;
+        
+        CommunicationManager cm = CommunicationManager.getInstance();
+        Response response = cm.sendRequest(query);
+        
+        return response;
+        
+    }
+
+    public Response deactivateService(String serviceName) throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+        String query = DEACTIVATE_SERVICE_QUERY + serviceName;
+        
+        CommunicationManager cm = CommunicationManager.getInstance();
+        Response response = cm.sendRequest(query);
+        
+        return response;
     }
 
 }
