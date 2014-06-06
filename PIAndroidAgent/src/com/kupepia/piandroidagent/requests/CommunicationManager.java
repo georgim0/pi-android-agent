@@ -58,7 +58,7 @@ public class CommunicationManager {
 		return this.ip;
 	}
 	
-	public Response sendRequest(String location) throws ClientProtocolException, IOException, KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, CertificateException   {
+	public Response sendRequest(String location) throws IOException, KeyManagementException, NoSuchAlgorithmException {
 	    
 	    URL url = new URL(this.ip + location);
 	    
