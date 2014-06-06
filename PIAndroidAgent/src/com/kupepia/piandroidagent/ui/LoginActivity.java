@@ -1,4 +1,10 @@
-package com.kupepia.piandroidagent;
+package com.kupepia.piandroidagent.ui;
+
+import com.kupepia.piandroidagent.R;
+import com.kupepia.piandroidagent.R.id;
+import com.kupepia.piandroidagent.R.layout;
+import com.kupepia.piandroidagent.R.menu;
+import com.kupepia.piandroidagent.R.string;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
