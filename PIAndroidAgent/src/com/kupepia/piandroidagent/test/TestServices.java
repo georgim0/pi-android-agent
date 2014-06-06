@@ -1,4 +1,5 @@
 package com.kupepia.piandroidagent.test;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import static com.kupepia.piandroidagent.test.SettingsForTests.address;
 public class TestServices extends AndroidTestCase {
 
     Services s = null;
-    
+
     @Override
     protected void setUp() throws Exception {
         s = new Services();
@@ -26,16 +27,15 @@ public class TestServices extends AndroidTestCase {
         cm.setRemoteHost(address);
         cm.signIn(password);
     }
-    
+
     public void test_service_request() {
-        
+
         try {
             s.init();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail();
         }
-        
+
         Object result = null;
         try {
             result = s.getResult();
@@ -43,21 +43,21 @@ public class TestServices extends AndroidTestCase {
             fail();
         }
         assertTrue(result instanceof JSONObject);
-        
+
         assertTrue(s.getServices() instanceof HashMap);
-    
+
     }
-    
+
     public void test_service_on() {
         String serviceName = "apache2";
-        
+
         try {
             Response r = s.activateService(serviceName);
             assertEquals(200, r.getCode());
         } catch (Exception e) {
             fail();
         }
-        
+
         try {
             s.init();
         } catch (Exception e) {
@@ -65,21 +65,19 @@ public class TestServices extends AndroidTestCase {
         }
         Map<String, Boolean> servicesMap = s.getServices();
         assertTrue(servicesMap.get("apache2"));
-        
-        
-        
+
     }
-    
+
     public void test_service_off() {
         String serviceName = "apache2";
-        
+
         try {
             Response r = s.deactivateService(serviceName);
             assertEquals(200, r.getCode());
         } catch (Exception e) {
             fail();
         }
-        
+
         try {
             s.init();
         } catch (Exception e) {
@@ -87,7 +85,7 @@ public class TestServices extends AndroidTestCase {
         }
         Map<String, Boolean> servicesMap = s.getServices();
         assertFalse(servicesMap.get("apache2"));
-        
+
     }
-    
+
 }

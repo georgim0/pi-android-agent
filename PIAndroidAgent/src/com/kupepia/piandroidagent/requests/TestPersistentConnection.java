@@ -1,9 +1,5 @@
 package com.kupepia.piandroidagent.requests;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -16,19 +12,19 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-public class TestPersistentConnection
-{
+public class TestPersistentConnection {
     private static SSLSocketFactory sslSocketFactory = null;
 
-
-    protected static void setAcceptAllVerifier(HttpsURLConnection connection) throws NoSuchAlgorithmException, KeyManagementException {
+    protected static void setAcceptAllVerifier(HttpsURLConnection connection)
+            throws NoSuchAlgorithmException, KeyManagementException {
 
         // Create the socket factory.
         // Reusing the same socket factory allows sockets to be
         // reused, supporting persistent connections.
-        if( null == sslSocketFactory) {
+        if (null == sslSocketFactory) {
             SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, ALL_TRUSTING_TRUST_MANAGER, new java.security.SecureRandom());
+            sc.init(null, ALL_TRUSTING_TRUST_MANAGER,
+                    new java.security.SecureRandom());
             sslSocketFactory = sc.getSocketFactory();
         }
 
@@ -39,17 +35,19 @@ public class TestPersistentConnection
         connection.setHostnameVerifier(ALL_TRUSTING_HOSTNAME_VERIFIER);
     }
 
-    private static final TrustManager[] ALL_TRUSTING_TRUST_MANAGER = new TrustManager[] {
-        new X509TrustManager() {
-            public X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
-            public void checkClientTrusted(X509Certificate[] certs, String authType) {}
-            public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+    private static final TrustManager[] ALL_TRUSTING_TRUST_MANAGER = new TrustManager[] { new X509TrustManager() {
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
         }
-    };
 
-    private static final HostnameVerifier ALL_TRUSTING_HOSTNAME_VERIFIER  = new HostnameVerifier() {
+        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+        }
+
+        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+        }
+    } };
+
+    private static final HostnameVerifier ALL_TRUSTING_HOSTNAME_VERIFIER = new HostnameVerifier() {
         public boolean verify(String hostname, SSLSession session) {
             return true;
         }
