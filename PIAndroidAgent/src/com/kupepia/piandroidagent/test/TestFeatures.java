@@ -8,15 +8,19 @@ import com.kupepia.piandroidagent.requests.Response;
 
 import android.test.AndroidTestCase;
 
+import static com.kupepia.piandroidagent.test.SettingsForTests.password;
+
+import static com.kupepia.piandroidagent.test.SettingsForTests.address;
+
 public class TestFeatures extends AndroidTestCase {
-    private final String password = "";
+
      
     public void test_file_manager_path_request() {
         String path="/home/pi/";
         try {
             CommunicationManager cm = CommunicationManager.getInstance();
             
-            cm.setRemoteHost("https://192.168.2.10:8003");
+            cm.setRemoteHost(address);
             
             cm.signIn(password);
             

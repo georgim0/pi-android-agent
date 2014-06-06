@@ -11,16 +11,19 @@ import com.kupepia.piandroidagent.requests.Response;
 
 import android.test.AndroidTestCase;
 
+import static com.kupepia.piandroidagent.test.SettingsForTests.password;
+
+import static com.kupepia.piandroidagent.test.SettingsForTests.address;
+
 public class TestServices extends AndroidTestCase {
 
     Services s = null;
-    private static final String password = "";
     
     @Override
     protected void setUp() throws Exception {
         s = new Services();
         CommunicationManager cm = CommunicationManager.getInstance();
-        cm.setRemoteHost("https://192.168.2.10:8003");
+        cm.setRemoteHost(address);
         cm.signIn(password);
     }
     
