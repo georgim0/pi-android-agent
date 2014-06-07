@@ -3,7 +3,9 @@ package com.kupepia.piandroidagent.features;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -12,18 +14,25 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.GridLayout;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.kupepia.piandroidagent.requests.CommunicationManager;
 import com.kupepia.piandroidagent.requests.Response;
+import com.kupepia.piandroidagent.ui.ArrayAdapterUI;
 
 public class Services extends FeatureUI {
 
-    private static final String DATA_QUERY = "/cgi-bin/toolkit/live_info.py?cmd=services";
-    private static final String ACTIVATE_SERVICE_QUERY = "/cgi-bin/toolkit/live_info.py?cmd=edit_service&param2=on&param1=";
-    private static final String DEACTIVATE_SERVICE_QUERY = "/cgi-bin/toolkit/live_info.py?cmd=edit_service&param2=off&param1=";
+    private static final String DATA_QUERY =
+            "/cgi-bin/toolkit/live_info.py?cmd=services";
+    private static final String ACTIVATE_SERVICE_QUERY =
+            "/cgi-bin/toolkit/live_info.py?cmd=edit_service&param2=on&param1=";
+    private static final String DEACTIVATE_SERVICE_QUERY =
+            "/cgi-bin/toolkit/live_info.py?cmd=edit_service&param2=off&param1=";
     Response response = null;
     Map<String, Boolean> result;
 
@@ -100,36 +109,41 @@ public class Services extends FeatureUI {
     @Override
     public View getView( Context c ) {
 
-        GridLayout glView = new GridLayout( c );
-
-        glView.setColumnCount( 2 );
-        glView.setScrollContainer( true );
-        glView.setScrollbarFadingEnabled( true );
-
-        TextView column1TitleTextView = new TextView( c );
-        column1TitleTextView.setText( "Service" );
-
-        TextView column2TitleTextView = new TextView( c );
-        column2TitleTextView.setText( "Status" );
+        ListView lv = new ListView( c );
+        List<View> views = new ArrayList<View>();
 
         for ( String serviceName : this.result.keySet() ) {
+            RelativeLayout rl = new RelativeLayout( c );
             TextView tvServiceName = new TextView( c );
             tvServiceName.setText( serviceName );
 
             Switch switchServiceStatus = new Switch( c );
             switchServiceStatus.setChecked( this.result.get( serviceName ) );
-            glView.addView( tvServiceName );
-            glView.addView( switchServiceStatus );
 
+            RelativeLayout.LayoutParams lp =
+                    new RelativeLayout.LayoutParams( LayoutParams.WRAP_CONTENT,
+                            LayoutParams.WRAP_CONTENT );
+
+            lp.addRule( RelativeLayout.ALIGN_PARENT_LEFT );
+
+            rl.addView( tvServiceName, lp );
+
+            lp =
+                    new RelativeLayout.LayoutParams( LayoutParams.WRAP_CONTENT,
+                            LayoutParams.WRAP_CONTENT );
+            lp.addRule( RelativeLayout.ALIGN_PARENT_RIGHT );
+
+            rl.addView( switchServiceStatus, lp );
+            views.add( rl );
         }
 
-        glView.addView( column1TitleTextView, 0 );
-        glView.addView( column2TitleTextView, 1 );
+        ArrayAdapter<View> adapter =
+                new ArrayAdapterUI( c,
+                        android.R.layout.simple_list_item_activated_1, views );
 
-        glView.refreshDrawableState();
+        lv.setAdapter( adapter );
 
-        return glView;
+        return lv;
     }
-
 
 }
