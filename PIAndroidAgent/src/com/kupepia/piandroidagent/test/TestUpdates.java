@@ -1,6 +1,5 @@
 package com.kupepia.piandroidagent.test;
 
-
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -30,20 +29,19 @@ public class TestUpdates extends AndroidTestCase {
     }
 
     public void test_init() {
-        
+
         try {
             u.init();
         } catch (Exception e) {
             fail();
         }
-        
+
         try {
             assertTrue(u.getResult() instanceof HashMap);
         } catch (JSONException e) {
             fail();
         }
-        
+
     }
-    
 
 }

@@ -21,35 +21,36 @@ import android.widget.TextView;
 public class Updates extends FeatureUI {
 
     private static final String QUERY_UPDATE = "/cgi-bin/toolkit/update_api.py";
-    
+
     private Map<String, String> packagesMap;
-    private String id; 
+    private String id;
+
     public Updates() {
         super();
         packagesMap = new HashMap<String, String>();
         id = "System updates";
     }
-    
+
     @Override
     public void init() throws IOException, KeyManagementException,
             NoSuchAlgorithmException, JSONException {
-        
+
         CommunicationManager cm = CommunicationManager.getInstance();
         Response response = cm.sendRequest(QUERY_UPDATE);
-        
+
         Object json = response.getBody();
-        
-        JSONObject packages = (JSONObject)json; 
-        
+
+        JSONObject packages = (JSONObject) json;
+
         JSONObject packageList = packages.getJSONObject("packages");
-        
+
         JSONArray packageNames = packageList.names();
-        
+
         for (int i = 0; i < packageNames.length(); i++) {
             String name = packageNames.getString(i);
             packagesMap.put(name, packageList.getString(name));
         }
-        
+
     }
 
     @Override
@@ -59,45 +60,42 @@ public class Updates extends FeatureUI {
 
     @Override
     public String getID() {
-        
+
         return id;
-        
+
     }
 
     @Override
     public View getView(Context c) {
-        
+
         GridLayout gl = new GridLayout(c);
-        
+
         gl.setColumnCount(2);
-        
+
         TextView tvpn = new TextView(c);
         TextView tvd = new TextView(c);
-        
+
         tvpn.setText("Package");
         tvd.setText("Description");
-        
-        
+
         for (String packageName : this.packagesMap.keySet()) {
             TextView tvPackageName = new TextView(c);
             TextView tvDescription = new TextView(c);
-            
+
             tvPackageName.setText(packageName);
             tvDescription.setText(this.packagesMap.get(packageName));
-            
+
             gl.addView(tvPackageName);
             gl.addView(tvDescription);
         }
-        
-        
-        
+
         return gl;
     }
-    
+
     public void performUpdate() {
-        
+
     }
-    
+
     public String toString() {
         return id;
     }
