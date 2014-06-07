@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import com.kupepia.piandroidagent.features.FeatureUI;
 import com.kupepia.piandroidagent.features.Services;
+import com.kupepia.piandroidagent.features.Updates;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -28,7 +29,7 @@ public class AppContent {
     static {
         // Add 3 sample items.
         addItem(new Services());
-        
+        addItem(new Updates());
     }
 
     private static void addItem(FeatureUI item) {
