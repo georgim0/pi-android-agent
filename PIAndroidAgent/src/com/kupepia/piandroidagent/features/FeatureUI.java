@@ -17,6 +17,10 @@ public abstract class FeatureUI implements Feature {
         FeatureBackgroundTask mAuthTask = new FeatureBackgroundTask();
         mAuthTask.execute( (Void) null );
     }
+    
+    public String toString() {
+        return this.getID();
+    }
 
     public class FeatureBackgroundTask extends AsyncTask<Void, Void, Void> {
         @Override
@@ -41,5 +45,6 @@ public abstract class FeatureUI implements Feature {
         protected void onCancelled() {
 
         }
+        
     }
 }

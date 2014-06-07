@@ -131,8 +131,5 @@ public class Services extends FeatureUI {
         return glView;
     }
 
-    public String toString() {
-        return this.id;
-    }
 
 }
