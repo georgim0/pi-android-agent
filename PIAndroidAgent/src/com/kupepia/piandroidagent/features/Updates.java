@@ -3,7 +3,9 @@ package com.kupepia.piandroidagent.features;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -12,10 +14,16 @@ import org.json.JSONObject;
 
 import com.kupepia.piandroidagent.requests.CommunicationManager;
 import com.kupepia.piandroidagent.requests.Response;
+import com.kupepia.piandroidagent.ui.ArrayAdapterUI;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
-import android.widget.GridLayout;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 public class Updates extends FeatureUI {
@@ -68,28 +76,67 @@ public class Updates extends FeatureUI {
     @Override
     public View getView( Context c ) {
 
-        GridLayout gl = new GridLayout( c );
+        RelativeLayout parentView = new RelativeLayout( c );
 
-        gl.setColumnCount( 2 );
-
-        TextView tvpn = new TextView( c );
-        TextView tvd = new TextView( c );
-
-        tvpn.setText( "Package" );
-        tvd.setText( "Description" );
+        List<View> views = new ArrayList<View>();
 
         for ( String packageName : this.packagesMap.keySet() ) {
+            RelativeLayout rl = new RelativeLayout( c );
+
             TextView tvPackageName = new TextView( c );
             TextView tvDescription = new TextView( c );
 
             tvPackageName.setText( packageName );
             tvDescription.setText( this.packagesMap.get( packageName ) );
+            tvPackageName.setTextScaleX( 1.4f );
+            tvPackageName.setTextColor( Color.BLUE );
+            RelativeLayout.LayoutParams lp =
+                    new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
+                            LayoutParams.WRAP_CONTENT );
 
-            gl.addView( tvPackageName );
-            gl.addView( tvDescription );
+            tvPackageName.setId( tvPackageName.hashCode() );
+
+            rl.addView( tvPackageName, lp );
+            lp =
+                    new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
+                            LayoutParams.WRAP_CONTENT );
+            lp.addRule( RelativeLayout.BELOW, tvPackageName.getId() );
+
+            rl.addView( tvDescription, lp );
+
+            views.add( rl );
+
         }
 
-        return gl;
+        ListView lv = new ListView( c );
+
+        ArrayAdapter<View> adapter =
+                new ArrayAdapterUI( c,
+                        android.R.layout.simple_list_item_activated_1, views );
+
+        lv.setAdapter( adapter );
+
+        RelativeLayout.LayoutParams lp =
+                new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
+                        LayoutParams.WRAP_CONTENT );
+
+        lv.setId( lv.hashCode() );
+        
+        parentView.addView( lv, lp );
+        
+        Button updateButton = new Button(c);
+        
+        updateButton.setText( "Update" );
+        
+        lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
+                        LayoutParams.WRAP_CONTENT );
+        
+        lp.addRule( RelativeLayout.BELOW, lv.getId() );
+        
+        parentView.addView( updateButton, lp );
+        
+        return parentView;
+
     }
 
     public void performUpdate() {

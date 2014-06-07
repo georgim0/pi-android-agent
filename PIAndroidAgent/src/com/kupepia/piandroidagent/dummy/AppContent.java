@@ -24,7 +24,8 @@ public class AppContent {
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static Map<String, FeatureUI> ITEM_MAP = new HashMap<String, FeatureUI>();
+    public static Map<String, FeatureUI> ITEM_MAP =
+            new HashMap<String, FeatureUI>();
 
     static {
         // Add 3 sample items.
