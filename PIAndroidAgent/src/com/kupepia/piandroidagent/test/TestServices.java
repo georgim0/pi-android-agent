@@ -24,27 +24,27 @@ public class TestServices extends AndroidTestCase {
     protected void setUp() throws Exception {
         s = new Services();
         CommunicationManager cm = CommunicationManager.getInstance();
-        cm.setRemoteHost(address);
-        cm.signIn(password);
+        cm.setRemoteHost( address );
+        cm.signIn( password );
     }
 
     public void test_service_request() {
 
         try {
             s.init();
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             fail();
         }
 
         Object result = null;
         try {
             result = s.getResult();
-        } catch (JSONException e) {
+        } catch ( JSONException e ) {
             fail();
         }
-        assertTrue(result instanceof JSONObject);
+        assertTrue( result instanceof JSONObject );
 
-        assertTrue(s.getServices() instanceof HashMap);
+        assertTrue( s.getServices() instanceof HashMap );
 
     }
 
@@ -52,19 +52,19 @@ public class TestServices extends AndroidTestCase {
         String serviceName = "apache2";
 
         try {
-            Response r = s.activateService(serviceName);
-            assertEquals(200, r.getCode());
-        } catch (Exception e) {
+            Response r = s.activateService( serviceName );
+            assertEquals( 200, r.getCode() );
+        } catch ( Exception e ) {
             fail();
         }
 
         try {
             s.init();
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             fail();
         }
         Map<String, Boolean> servicesMap = s.getServices();
-        assertTrue(servicesMap.get("apache2"));
+        assertTrue( servicesMap.get( "apache2" ) );
 
     }
 
@@ -72,19 +72,19 @@ public class TestServices extends AndroidTestCase {
         String serviceName = "apache2";
 
         try {
-            Response r = s.deactivateService(serviceName);
-            assertEquals(200, r.getCode());
-        } catch (Exception e) {
+            Response r = s.deactivateService( serviceName );
+            assertEquals( 200, r.getCode() );
+        } catch ( Exception e ) {
             fail();
         }
 
         try {
             s.init();
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             fail();
         }
         Map<String, Boolean> servicesMap = s.getServices();
-        assertFalse(servicesMap.get("apache2"));
+        assertFalse( servicesMap.get( "apache2" ) );
 
     }
 

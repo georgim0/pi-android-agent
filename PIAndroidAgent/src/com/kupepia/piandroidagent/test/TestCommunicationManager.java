@@ -18,29 +18,29 @@ public class TestCommunicationManager extends AndroidTestCase {
         try {
 
             CommunicationManager cm = CommunicationManager.getInstance();
-            cm.setRemoteHost(address);
-            Response response = cm.signIn(password);
-            assertEquals(200, response.getCode());
+            cm.setRemoteHost( address );
+            Response response = cm.signIn( password );
+            assertEquals( 200, response.getCode() );
 
             Object responseBody = response.getBody();
             JSONObject js = null;
 
-            if (responseBody instanceof JSONObject) {
+            if ( responseBody instanceof JSONObject ) {
                 js = (JSONObject) responseBody;
             } else {
                 fail();
             }
 
-            assertTrue(js.getInt("mem") > 0);
+            assertTrue( js.getInt( "mem" ) > 0 );
 
             String otherpassword = "123456";
             try {
-                response = cm.signIn(otherpassword);
+                response = cm.signIn( otherpassword );
 
-            } catch (FileNotFoundException e) {
+            } catch ( FileNotFoundException e ) {
                 return;
             }
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             fail();
         }
     }
@@ -49,13 +49,13 @@ public class TestCommunicationManager extends AndroidTestCase {
         try {
 
             CommunicationManager cm = CommunicationManager.getInstance();
-            cm.setRemoteHost(address);
-            cm.signIn(password);
+            cm.setRemoteHost( address );
+            cm.signIn( password );
             Response r = cm
-                    .sendRequest("/cgi-bin/toolkit/live_info.py?cmd=all_status");
-            assertEquals(200, r.getCode());
+                    .sendRequest( "/cgi-bin/toolkit/live_info.py?cmd=all_status" );
+            assertEquals( 200, r.getCode() );
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             fail();
         }
     }

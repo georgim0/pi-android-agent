@@ -30,13 +30,13 @@ public class CommunicationManager {
 
     public static CommunicationManager getInstance() {
 
-        if (cm == null) {
+        if ( cm == null ) {
             cm = new CommunicationManager();
         }
         return cm;
     }
 
-    public void setRemoteHost(String IP) {
+    public void setRemoteHost( String IP ) {
         this.ip = IP;
     }
 
@@ -44,66 +44,66 @@ public class CommunicationManager {
         return this.ip;
     }
 
-    public Response sendRequest(String location) throws IOException,
+    public Response sendRequest( String location ) throws IOException,
             KeyManagementException, NoSuchAlgorithmException, JSONException {
 
-        URL url = new URL(this.ip + location);
+        URL url = new URL( this.ip + location );
 
         HttpURLConnection httpConnection = (HttpsURLConnection) url
                 .openConnection();
 
         TestPersistentConnection
-                .setAcceptAllVerifier((HttpsURLConnection) httpConnection);
+                .setAcceptAllVerifier( (HttpsURLConnection) httpConnection );
 
-        return sendRequest(location, (HttpsURLConnection) httpConnection);
+        return sendRequest( location, (HttpsURLConnection) httpConnection );
 
     }
 
-    public Response sendRequest(String location, HttpsURLConnection connection)
+    public Response sendRequest( String location, HttpsURLConnection connection )
             throws IOException, JSONException {
         String userpass = USERNAME + ":" + password;
         String basicAuth = "Basic "
-                + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
-        connection.setRequestProperty("Authorization", basicAuth);
+                + Base64.encodeToString( userpass.getBytes(), Base64.DEFAULT );
+        connection.setRequestProperty( "Authorization", basicAuth );
 
         connection.connect();
         InputStream is = connection.getInputStream();
 
-        BufferedReader streamReader = new BufferedReader(new InputStreamReader(
-                is, "UTF-8"));
+        BufferedReader streamReader = new BufferedReader(
+                new InputStreamReader( is, "UTF-8" ) );
         StringBuilder responseStrBuilder = new StringBuilder();
 
         String inputStr;
-        responseStrBuilder.append("[");
-        while ((inputStr = streamReader.readLine()) != null)
-            responseStrBuilder.append(inputStr);
-        responseStrBuilder.append("]");
+        responseStrBuilder.append( "[" );
+        while ( ( inputStr = streamReader.readLine() ) != null )
+            responseStrBuilder.append( inputStr );
+        responseStrBuilder.append( "]" );
 
         streamReader.close();
         JSONArray json = null;
-        json = new JSONArray(responseStrBuilder.toString());
+        json = new JSONArray( responseStrBuilder.toString() );
 
-        Response res = new Response(json, connection.getResponseCode());
+        Response res = new Response( json, connection.getResponseCode() );
         return res;
 
     }
 
-    public Response signIn(final String password) throws IOException,
+    public Response signIn( final String password ) throws IOException,
             KeyManagementException, NoSuchAlgorithmException, JSONException {
 
         String location = ip + SIGN_IN_LOCATION;
 
         this.password = password;
 
-        URL url = new URL(location);
+        URL url = new URL( location );
 
         HttpURLConnection httpConnection = (HttpsURLConnection) url
                 .openConnection();
 
         TestPersistentConnection
-                .setAcceptAllVerifier((HttpsURLConnection) httpConnection);
+                .setAcceptAllVerifier( (HttpsURLConnection) httpConnection );
 
-        return sendRequest(location, (HttpsURLConnection) httpConnection);
+        return sendRequest( location, (HttpsURLConnection) httpConnection );
 
     }
 

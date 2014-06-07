@@ -28,15 +28,13 @@ public class AppContent {
 
     static {
         // Add 3 sample items.
-        addItem(new Services());
-        addItem(new Updates());
+        addItem( new Services() );
+        addItem( new Updates() );
     }
 
-    private static void addItem(FeatureUI item) {
-        ITEMS.add(item);
-        ITEM_MAP.put(item.getID(), item);
+    private static void addItem( FeatureUI item ) {
+        ITEMS.add( item );
+        ITEM_MAP.put( item.getID(), item );
     }
-    
-
 
 }

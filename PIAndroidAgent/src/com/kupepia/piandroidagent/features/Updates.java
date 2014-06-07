@@ -36,19 +36,19 @@ public class Updates extends FeatureUI {
             NoSuchAlgorithmException, JSONException {
 
         CommunicationManager cm = CommunicationManager.getInstance();
-        Response response = cm.sendRequest(QUERY_UPDATE);
+        Response response = cm.sendRequest( QUERY_UPDATE );
 
         Object json = response.getBody();
 
         JSONObject packages = (JSONObject) json;
 
-        JSONObject packageList = packages.getJSONObject("packages");
+        JSONObject packageList = packages.getJSONObject( "packages" );
 
         JSONArray packageNames = packageList.names();
 
-        for (int i = 0; i < packageNames.length(); i++) {
-            String name = packageNames.getString(i);
-            packagesMap.put(name, packageList.getString(name));
+        for ( int i = 0; i < packageNames.length(); i++ ) {
+            String name = packageNames.getString( i );
+            packagesMap.put( name, packageList.getString( name ) );
         }
 
     }
@@ -66,27 +66,27 @@ public class Updates extends FeatureUI {
     }
 
     @Override
-    public View getView(Context c) {
+    public View getView( Context c ) {
 
-        GridLayout gl = new GridLayout(c);
+        GridLayout gl = new GridLayout( c );
 
-        gl.setColumnCount(2);
+        gl.setColumnCount( 2 );
 
-        TextView tvpn = new TextView(c);
-        TextView tvd = new TextView(c);
+        TextView tvpn = new TextView( c );
+        TextView tvd = new TextView( c );
 
-        tvpn.setText("Package");
-        tvd.setText("Description");
+        tvpn.setText( "Package" );
+        tvd.setText( "Description" );
 
-        for (String packageName : this.packagesMap.keySet()) {
-            TextView tvPackageName = new TextView(c);
-            TextView tvDescription = new TextView(c);
+        for ( String packageName : this.packagesMap.keySet() ) {
+            TextView tvPackageName = new TextView( c );
+            TextView tvDescription = new TextView( c );
 
-            tvPackageName.setText(packageName);
-            tvDescription.setText(this.packagesMap.get(packageName));
+            tvPackageName.setText( packageName );
+            tvDescription.setText( this.packagesMap.get( packageName ) );
 
-            gl.addView(tvPackageName);
-            gl.addView(tvDescription);
+            gl.addView( tvPackageName );
+            gl.addView( tvDescription );
         }
 
         return gl;

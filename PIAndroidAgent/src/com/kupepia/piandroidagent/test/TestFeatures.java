@@ -19,29 +19,29 @@ public class TestFeatures extends AndroidTestCase {
         try {
             CommunicationManager cm = CommunicationManager.getInstance();
 
-            cm.setRemoteHost(address);
+            cm.setRemoteHost( address );
 
-            cm.signIn(password);
+            cm.signIn( password );
 
             Response r = cm
-                    .sendRequest("/cgi-bin/toolkit/file_manager.py?path="
-                            + path);
-            assertEquals(200, r.getCode());
+                    .sendRequest( "/cgi-bin/toolkit/file_manager.py?path="
+                            + path );
+            assertEquals( 200, r.getCode() );
 
             Object responseBody = r.getBody();
             JSONArray ja = null;
 
-            if (responseBody instanceof JSONArray) {
+            if ( responseBody instanceof JSONArray ) {
                 ja = (JSONArray) responseBody;
             }
 
-            assertEquals(2, ja.length());
+            assertEquals( 2, ja.length() );
 
-            assertTrue(ja.get(0) instanceof JSONObject);
+            assertTrue( ja.get( 0 ) instanceof JSONObject );
 
-            assertTrue(ja.getJSONObject(0).has("name"));
+            assertTrue( ja.getJSONObject( 0 ).has( "name" ) );
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             fail();
         }
     }

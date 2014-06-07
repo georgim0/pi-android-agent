@@ -24,21 +24,21 @@ public class TestUpdates extends AndroidTestCase {
     protected void setUp() throws Exception {
         u = new Updates();
         CommunicationManager cm = CommunicationManager.getInstance();
-        cm.setRemoteHost(address);
-        cm.signIn(password);
+        cm.setRemoteHost( address );
+        cm.signIn( password );
     }
 
     public void test_init() {
 
         try {
             u.init();
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             fail();
         }
 
         try {
-            assertTrue(u.getResult() instanceof HashMap);
-        } catch (JSONException e) {
+            assertTrue( u.getResult() instanceof HashMap );
+        } catch ( JSONException e ) {
             fail();
         }
 

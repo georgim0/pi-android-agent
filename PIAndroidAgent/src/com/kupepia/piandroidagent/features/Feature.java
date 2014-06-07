@@ -18,6 +18,6 @@ public interface Feature {
 
     String getID();
 
-    View getView(Context c);
+    View getView( Context c );
 
 }

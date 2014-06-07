@@ -28,7 +28,7 @@ public class Services extends FeatureUI {
     Map<String, Boolean> result;
 
     private final String id;
-    
+
     public Services() {
         super();
         result = new HashMap<String, Boolean>();
@@ -41,14 +41,14 @@ public class Services extends FeatureUI {
 
         CommunicationManager cm = CommunicationManager.getInstance();
 
-        response = cm.sendRequest(DATA_QUERY);
+        response = cm.sendRequest( DATA_QUERY );
         JSONObject responseBody = (JSONObject) response.getBody();
         JSONArray json_names = responseBody.names();
 
-        for (int i = 0; i < json_names.length(); i++) {
-            String key = json_names.getString(i);
-            boolean value = responseBody.getBoolean(key);
-            result.put(key, value);
+        for ( int i = 0; i < json_names.length(); i++ ) {
+            String key = json_names.getString( i );
+            boolean value = responseBody.getBoolean( key );
+            result.put( key, value );
         }
 
     }
@@ -56,7 +56,7 @@ public class Services extends FeatureUI {
     @Override
     public Object getResult() throws JSONException {
 
-        if (response == null)
+        if ( response == null )
             return null;
 
         return response.getBody();
@@ -67,71 +67,69 @@ public class Services extends FeatureUI {
         return result;
     }
 
-    public Response activateService(String serviceName)
+    public Response activateService( String serviceName )
             throws KeyManagementException, NoSuchAlgorithmException,
             IOException, JSONException {
         String query = ACTIVATE_SERVICE_QUERY + serviceName;
 
         CommunicationManager cm = CommunicationManager.getInstance();
-        Response response = cm.sendRequest(query);
+        Response response = cm.sendRequest( query );
 
         return response;
 
     }
 
-    public Response deactivateService(String serviceName)
+    public Response deactivateService( String serviceName )
             throws KeyManagementException, NoSuchAlgorithmException,
             IOException, JSONException {
         String query = DEACTIVATE_SERVICE_QUERY + serviceName;
 
         CommunicationManager cm = CommunicationManager.getInstance();
-        Response response = cm.sendRequest(query);
+        Response response = cm.sendRequest( query );
 
         return response;
     }
 
     @Override
     public String getID() {
-        
+
         return this.id;
-    
+
     }
 
     @Override
-    public View getView(Context c) {
-        
-        GridLayout glView = new GridLayout(c);
-        
-        glView.setColumnCount(2);
-        glView.setScrollContainer(true);
-        glView.setScrollbarFadingEnabled(true);
-        
-        TextView column1TitleTextView = new TextView(c);
-        column1TitleTextView.setText("Service");
-        
+    public View getView( Context c ) {
 
-        TextView column2TitleTextView = new TextView(c);
-        column2TitleTextView.setText("Status");
-        
-        for (String serviceName : this.result.keySet()) {
-            TextView tvServiceName = new TextView(c);
-            tvServiceName.setText(serviceName);
-            
-            Switch switchServiceStatus = new Switch(c);
-            switchServiceStatus.setChecked(this.result.get(serviceName));
-            glView.addView(tvServiceName);
-            glView.addView(switchServiceStatus);
-            
+        GridLayout glView = new GridLayout( c );
+
+        glView.setColumnCount( 2 );
+        glView.setScrollContainer( true );
+        glView.setScrollbarFadingEnabled( true );
+
+        TextView column1TitleTextView = new TextView( c );
+        column1TitleTextView.setText( "Service" );
+
+        TextView column2TitleTextView = new TextView( c );
+        column2TitleTextView.setText( "Status" );
+
+        for ( String serviceName : this.result.keySet() ) {
+            TextView tvServiceName = new TextView( c );
+            tvServiceName.setText( serviceName );
+
+            Switch switchServiceStatus = new Switch( c );
+            switchServiceStatus.setChecked( this.result.get( serviceName ) );
+            glView.addView( tvServiceName );
+            glView.addView( switchServiceStatus );
+
         }
-        
-        glView.addView(column1TitleTextView, 0);
-        glView.addView(column2TitleTextView, 1);
+
+        glView.addView( column1TitleTextView, 0 );
+        glView.addView( column2TitleTextView, 1 );
 
         glView.refreshDrawableState();
-        
+
         return glView;
     }
-    
 
     public String toString() {
         return this.id;
