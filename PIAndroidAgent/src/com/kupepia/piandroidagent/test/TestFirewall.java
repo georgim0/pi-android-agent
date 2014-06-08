@@ -5,8 +5,8 @@ import java.util.List;
 import org.json.JSONException;
 
 import com.kupepia.piandroidagent.features.Firewall;
-import com.kupepia.piandroidagent.objects.Chain;
-import com.kupepia.piandroidagent.objects.Rule;
+import com.kupepia.piandroidagent.features.objects.Chain;
+import com.kupepia.piandroidagent.features.objects.Rule;
 import com.kupepia.piandroidagent.requests.CommunicationManager;
 
 import android.test.AndroidTestCase;

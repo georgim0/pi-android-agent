@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.kupepia.piandroidagent.features.FeatureUI;
+import com.kupepia.piandroidagent.features.Firewall;
 import com.kupepia.piandroidagent.features.Overview;
 import com.kupepia.piandroidagent.features.Services;
 import com.kupepia.piandroidagent.features.Updates;
@@ -30,9 +31,10 @@ public class AppContent {
 
     static {
         // Add 3 sample items.
-        addItem(new Overview());
+        addItem( new Overview() );
         addItem( new Services() );
         addItem( new Updates() );
+        addItem( new Firewall() );
     }
 
     private static void addItem( FeatureUI item ) {

@@ -10,13 +10,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.kupepia.piandroidagent.objects.Chain;
-import com.kupepia.piandroidagent.objects.Rule;
+import com.kupepia.piandroidagent.features.objects.Chain;
+import com.kupepia.piandroidagent.features.objects.Rule;
 import com.kupepia.piandroidagent.requests.CommunicationManager;
 import com.kupepia.piandroidagent.requests.Response;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.HorizontalScrollView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 public class Firewall extends FeatureUI {
 
@@ -32,10 +45,16 @@ public class Firewall extends FeatureUI {
     private List<Chain> chains;
     private String id = "Firewall management";
 
+    private TableLayout chainView;
+    private ArrayAdapter<Chain> adapter;
+
+    private ScrollView sv;
+    private TextView tvDefault;
+
     public Firewall() {
         chains = new ArrayList<Chain>();
     }
-    
+
     @Override
     public void init() throws IOException, KeyManagementException,
             NoSuchAlgorithmException, JSONException {
@@ -50,7 +69,7 @@ public class Firewall extends FeatureUI {
 
         for ( int i = 0; i < chainNames.length(); i++ ) {
             String chain = chainNames.getString( i );
-            Chain firewallChain = new Chain(chain);
+            Chain firewallChain = new Chain( chain );
 
             JSONObject chainData = data.getJSONObject( chain );
 
@@ -71,9 +90,8 @@ public class Firewall extends FeatureUI {
                 rule.setTarget( ruleJS.getString( "target" ) );
                 firewallChain.addRule( rule );
             }// for
-            
-            chains.add( firewallChain );
 
+            chains.add( firewallChain );
         }
 
     }
@@ -90,8 +108,100 @@ public class Firewall extends FeatureUI {
 
     @Override
     public View getView( Context c ) {
-        // TODO Auto-generated method stub
-        return null;
+        Spinner chainSpinner = new Spinner( c );
+
+        sv = new ScrollView( c );
+        sv.setHorizontalScrollBarEnabled( true );
+
+        if ( chainView == null )
+            chainView = new TableLayout( c );
+
+        if ( adapter == null )
+            adapter =
+                    new ArrayAdapter<Chain>( c,
+                            android.R.layout.simple_spinner_dropdown_item,
+                            chains );
+        tvDefault = new TextView( c );
+
+        chainSpinner.setAdapter( adapter );
+
+        chainSpinner.setOnItemSelectedListener( new OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected( AdapterView<?> parent, View view,
+                    int position, long id ) {
+
+                Chain selectedChain = adapter.getItem( position );
+                sv.removeAllViews();
+                HorizontalScrollView hsv =
+                        new HorizontalScrollView( view.getContext() );
+
+                hsv.addView( selectedChain.getView( view.getContext() ) );
+                sv.addView( hsv );
+
+                setPolicyView( tvDefault, selectedChain.getDefaultRule() );
+            }
+
+            @Override
+            public void onNothingSelected( AdapterView<?> arg0 ) {
+                // TODO Auto-generated method stub
+
+            }
+
+        } );
+
+        RelativeLayout rl = new RelativeLayout( c );
+
+        RelativeLayout.LayoutParams lp =
+                new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
+                        LayoutParams.WRAP_CONTENT );
+
+        lp.addRule( RelativeLayout.ALIGN_PARENT_LEFT );
+
+        rl.addView( chainSpinner, lp );
+
+        chainSpinner.setId( chainSpinner.hashCode() );
+
+        tvDefault.setId( 18232 );
+        
+        lp =
+                new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
+                        LayoutParams.WRAP_CONTENT );
+
+        lp.addRule( RelativeLayout.BELOW, chainSpinner.getId() );
+
+        lp.addRule( RelativeLayout.CENTER_HORIZONTAL );
+
+        rl.addView( tvDefault, lp );
+
+        lp =
+                new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
+                        LayoutParams.WRAP_CONTENT );
+
+        lp.addRule( RelativeLayout.BELOW, tvDefault.getId() );
+
+        lp.addRule( RelativeLayout.CENTER_HORIZONTAL );
+
+        sv.addView( chainView );
+
+        rl.addView( sv, lp );
+
+        return rl;
+    }
+
+    public static void
+            setPolicyView( TextView tvDefault, String defaultRule ) {
+
+        tvDefault.setText( "Default policy: " + defaultRule );
+        int color = Color.BLUE;
+        if ( defaultRule.equals( "ACCEPT" ) ) {
+            color = Color.GREEN;
+        } else if ( defaultRule.equals( "DROP" ) ) {
+            color = Color.RED;
+        }
+        
+        tvDefault.setTextColor( color );
+
     }
 
 }

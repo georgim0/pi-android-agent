@@ -5,4 +5,4 @@
  * @author vnicolao
  *
  */
-package com.kupepia.piandroidagent.objects;
+package com.kupepia.piandroidagent.features.objects;

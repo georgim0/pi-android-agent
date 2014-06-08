@@ -1,4 +1,12 @@
-package com.kupepia.piandroidagent.objects;
+package com.kupepia.piandroidagent.features.objects;
+
+import com.kupepia.piandroidagent.features.Firewall;
+
+import android.content.Context;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 public class Rule {
 
@@ -66,6 +74,48 @@ public class Rule {
         r.source = source;
         r.target = target;
         return r;
+    }
+
+    public View getView( Context c ) {
+
+        TableRow.LayoutParams rowParams =
+                new TableRow.LayoutParams( TableRow.LayoutParams.WRAP_CONTENT,
+                        TableRow.LayoutParams.WRAP_CONTENT );
+        
+        int value = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 
+                (float) 10, c.getResources().getDisplayMetrics());
+        
+        
+        rowParams.rightMargin = value;
+                
+        TableRow tableRow = new TableRow( c );
+
+        TextView tvProtocol = new TextView( c );
+        TextView tvTarget = new TextView( c );
+        TextView tvOtherInfo = new TextView( c );
+        TextView tvDestination = new TextView( c );
+        TextView tvSource = new TextView( c );
+        TextView tvOption = new TextView( c );
+
+        tvProtocol.setText( protocol );
+        
+        Firewall.setPolicyView( tvTarget, target );
+        tvTarget.setText( target );
+        
+        tvOtherInfo.setText( otherInfo );
+        tvDestination.setText( destination );
+        tvSource.setText( source );
+        tvOption.setText( option );
+
+        tableRow.addView(tvProtocol, rowParams);
+        tableRow.addView(tvTarget, rowParams);
+        tableRow.addView(tvOtherInfo, rowParams);
+        tableRow.addView(tvDestination, rowParams);
+        tableRow.addView( tvSource, rowParams );
+        tableRow.addView(tvOption, rowParams);
+        
+        return tableRow;
+
     }
 
 }
