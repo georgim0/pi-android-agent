@@ -212,11 +212,9 @@ public class LoginActivity extends Activity {
                 return false;
             }
             
-            try {
-                return json.getString("hostname").equals(mAddress);
-            } catch (JSONException e) {
-                return false;
-            }
+            
+            return true;
+            
         }
 
         @Override

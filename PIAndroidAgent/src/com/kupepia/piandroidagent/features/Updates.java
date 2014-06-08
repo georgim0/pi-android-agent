@@ -30,8 +30,15 @@ public class Updates extends FeatureUI {
 
     private static final String QUERY_UPDATE = "/cgi-bin/toolkit/update_api.py";
 
+    private static final int NO_ACTION = 0;
+
+    private static final int BUSY = 201;
+
+    private static final int UPDATE_PENDING = 100;
+
     private Map<String, String> packagesMap;
     private String id;
+    private JSONObject result;
 
     public Updates() {
         super();
@@ -49,6 +56,7 @@ public class Updates extends FeatureUI {
         Object json = response.getBody();
 
         JSONObject packages = (JSONObject) json;
+        this.result = packages;
 
         JSONObject packageList = packages.getJSONObject( "packages" );
 
@@ -63,7 +71,7 @@ public class Updates extends FeatureUI {
 
     @Override
     public Object getResult() throws JSONException {
-        return this.packagesMap;
+        return this.result;
     }
 
     @Override
@@ -75,6 +83,14 @@ public class Updates extends FeatureUI {
 
     @Override
     public View getView( Context c ) {
+
+        if ( packagesMap.size() == 0 ) {
+            try {
+                return getOtherView( c );
+            } catch ( JSONException je ) {
+                return getErrorView( c );
+            }
+        }
 
         RelativeLayout parentView = new RelativeLayout( c );
 
@@ -120,22 +136,80 @@ public class Updates extends FeatureUI {
                 new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
                         LayoutParams.WRAP_CONTENT );
 
-        lv.setId( lv.hashCode() );
-        
-        parentView.addView( lv, lp );
-        
-        Button updateButton = new Button(c);
-        
+        Button updateButton = new Button( c );
+        updateButton.setId( 859230 );
+
         updateButton.setText( "Update" );
+
+        parentView.addView( updateButton, lp );
+
+        lp =
+                new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
+                        LayoutParams.WRAP_CONTENT );
+
+        lp.addRule( RelativeLayout.BELOW, updateButton.getId() );
+
+        parentView.addView( lv, lp );
+
+        return parentView;
+
+    }
+
+    private View getErrorView( Context c ) {
+        TextView tv = new TextView(c);
+        tv.setText( "Something went wrong!" );
+        return tv;
+    }
+
+    private View getOtherView( Context c ) throws JSONException {
+
+        int status = result.getInt( "status" );
+
+        switch ( status ) {
+            case NO_ACTION:
+                return getOKView( c );
+
+            case BUSY:
+            case UPDATE_PENDING:
+                return getBusyView( c );
+            default:
+                return getErrorView( c );
+
+        }
+
+    }
+
+    private View getBusyView( Context c ) {
+        TextView tv = new TextView( c );
+        tv.setText( "The package manager is busy right now. Try again in a moment!" );
+        return tv;
+    }
+
+    private View getOKView( Context c ) {
+
+        RelativeLayout rl = new RelativeLayout( c );
+
+        TextView tv = new TextView( c );
+        tv.setText( "System is up to date!" );
+        tv.setId( 9121 );
         
-        lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
+        Button checkButton = new Button( c );
+        checkButton.setText( "Check for updates" );
+
+        RelativeLayout.LayoutParams lp =
+                new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
                         LayoutParams.WRAP_CONTENT );
         
-        lp.addRule( RelativeLayout.BELOW, lv.getId() );
+        rl.addView( tv, lp );
+        lp =
+                new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
+                        LayoutParams.WRAP_CONTENT );
+        lp.addRule( RelativeLayout.ALIGN_PARENT_LEFT );
+        lp.addRule( RelativeLayout.BELOW, tv.getId() );
         
-        parentView.addView( updateButton, lp );
+        rl.addView( checkButton, lp );
         
-        return parentView;
+        return rl;
 
     }
 

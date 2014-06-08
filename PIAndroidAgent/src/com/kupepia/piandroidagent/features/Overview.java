@@ -14,6 +14,7 @@ import com.kupepia.piandroidagent.ui.ArrayAdapterUI;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -120,7 +121,7 @@ public class Overview extends FeatureUI {
         }
         
         tv.setTextColor( color );
-
+        tv.setTypeface( null, Typeface.BOLD );
         return tv;
     }
 
@@ -135,6 +136,8 @@ public class Overview extends FeatureUI {
             tvUpdate.setText( "System is up to date" );
             tvUpdate.setTextColor( Color.GREEN );
         }
+
+        tvUpdate.setTypeface( null, Typeface.BOLD );
         return tvUpdate;
     }
 
@@ -156,6 +159,7 @@ public class Overview extends FeatureUI {
 
         tv.setTextColor( color );
 
+        tv.setTypeface( null, Typeface.BOLD );
         return tv;
 
     }
@@ -177,6 +181,7 @@ public class Overview extends FeatureUI {
 
         tv.setTextColor( color );
 
+        tv.setTypeface( null, Typeface.BOLD );
         return tv;
 
     }
@@ -187,6 +192,8 @@ public class Overview extends FeatureUI {
 
         tv.setText( "Kernel: " + kernel );
         tv.setTextColor( Color.BLUE );
+
+        tv.setTypeface( null, Typeface.BOLD );
         return tv;
     }
 
@@ -196,6 +203,8 @@ public class Overview extends FeatureUI {
         tv.setText( "Hostname: " + hostname );
 
         tv.setTextColor( Color.BLUE );
+
+        tv.setTypeface( null, Typeface.BOLD );
         return tv;
     }
 
@@ -217,6 +226,7 @@ public class Overview extends FeatureUI {
 
         tv.setTextColor( color );
 
+        tv.setTypeface( null, Typeface.BOLD );
         return tv;
     }
 
