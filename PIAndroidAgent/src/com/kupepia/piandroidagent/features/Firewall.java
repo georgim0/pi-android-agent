@@ -3,9 +3,17 @@ package com.kupepia.piandroidagent.features;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.kupepia.piandroidagent.objects.Chain;
+import com.kupepia.piandroidagent.objects.Rule;
+import com.kupepia.piandroidagent.requests.CommunicationManager;
+import com.kupepia.piandroidagent.requests.Response;
 
 import android.content.Context;
 import android.view.View;
@@ -22,111 +30,68 @@ public class Firewall extends FeatureUI {
      * {"rules": [], "default": "ACCEPT"}}
      */
     private List<Chain> chains;
+    private String id = "Firewall management";
 
+    public Firewall() {
+        chains = new ArrayList<Chain>();
+    }
+    
     @Override
     public void init() throws IOException, KeyManagementException,
             NoSuchAlgorithmException, JSONException {
-        // TODO Auto-generated method stub
+
+        CommunicationManager cm = CommunicationManager.getInstance();
+
+        Response response = cm.sendRequest( FIREWALL_DATA_QUERY );
+
+        JSONObject data = (JSONObject) response.getBody();
+
+        JSONArray chainNames = data.names();
+
+        for ( int i = 0; i < chainNames.length(); i++ ) {
+            String chain = chainNames.getString( i );
+            Chain firewallChain = new Chain(chain);
+
+            JSONObject chainData = data.getJSONObject( chain );
+
+            String defaultRule = chainData.getString( "default" );
+            firewallChain.setDefaultRule( defaultRule );
+
+            JSONArray rulesData = chainData.getJSONArray( "rules" );
+
+            for ( int j = 0; j < rulesData.length(); j++ ) {
+
+                JSONObject ruleJS = rulesData.getJSONObject( j );
+                Rule rule = new Rule();
+                rule.setDestination( ruleJS.getString( "destination" ) );
+                rule.setOption( ruleJS.getString( "option" ) );
+                rule.setOtherInfo( ruleJS.getString( "otherinfo" ) );
+                rule.setProtocol( ruleJS.getString( "protocol" ) );
+                rule.setSource( ruleJS.getString( "source" ) );
+                rule.setTarget( ruleJS.getString( "target" ) );
+                firewallChain.addRule( rule );
+            }// for
+            
+            chains.add( firewallChain );
+
+        }
 
     }
 
     @Override
-    public Object getResult() throws JSONException {
-        // TODO Auto-generated method stub
-        return null;
+    public List<Chain> getResult() throws JSONException {
+        return chains;
     }
 
     @Override
     public String getID() {
-        // TODO Auto-generated method stub
-        return null;
+        return id;
     }
 
     @Override
     public View getView( Context c ) {
         // TODO Auto-generated method stub
         return null;
-    }
-
-}
-
-class Chain {
-
-    private List<Rule> rules;
-    private String defaultRule;
-
-    public String getDefaultRule() {
-        return defaultRule;
-    }
-
-    public void setDefaultRule( String defaultRule ) {
-        this.defaultRule = defaultRule;
-    }
-
-    public void addRule( Rule r ) {
-        rules.add( r );
-    }
-
-    protected List<Rule> getRules() {
-        return rules;
-    }
-}
-
-class Rule {
-
-    private String protocol;
-    private String target;
-    private String otherInfo;
-    private String destination;
-    private String source;
-    private String option;
-
-    public String getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol( String protocol ) {
-        this.protocol = protocol;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public void setTarget( String target ) {
-        this.target = target;
-    }
-
-    public String getOtherInfo() {
-        return otherInfo;
-    }
-
-    public void setOtherInfo( String otherInfo ) {
-        this.otherInfo = otherInfo;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination( String destination ) {
-        this.destination = destination;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource( String source ) {
-        this.source = source;
-    }
-
-    public String getOption() {
-        return option;
-    }
-
-    public void setOption( String option ) {
-        this.option = option;
     }
 
 }
