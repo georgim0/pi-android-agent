@@ -1,12 +1,5 @@
 package com.kupepia.piandroidagent.test;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-
-import org.json.JSONException;
-
 import com.kupepia.piandroidagent.features.Overview;
 import com.kupepia.piandroidagent.requests.CommunicationManager;
 
