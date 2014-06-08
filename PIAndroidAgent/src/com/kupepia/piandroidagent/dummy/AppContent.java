@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import com.kupepia.piandroidagent.features.FeatureUI;
 import com.kupepia.piandroidagent.features.Firewall;
+import com.kupepia.piandroidagent.features.GPIO;
 import com.kupepia.piandroidagent.features.Overview;
 import com.kupepia.piandroidagent.features.Services;
 import com.kupepia.piandroidagent.features.Updates;
@@ -35,6 +36,7 @@ public class AppContent {
         addItem( new Services() );
         addItem( new Updates() );
         addItem( new Firewall() );
+        addItem( new GPIO() );
     }
 
     private static void addItem( FeatureUI item ) {

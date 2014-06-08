@@ -11,11 +11,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ViewSwitcher;
 
 import com.kupepia.piandroidagent.features.objects.Pin;
 import com.kupepia.piandroidagent.requests.CommunicationManager;
 import com.kupepia.piandroidagent.requests.Response;
+import com.kupepia.piandroidagent.ui.ArrayAdapterUI;
+import com.kupepia.piandroidagent.ui.ViewableArrayAdapterUI;
 
 public class GPIO extends FeatureUI {
 
@@ -26,9 +35,12 @@ public class GPIO extends FeatureUI {
     private List<Pin> rightPins;
     private JSONArray data;
 
+    private final String id;
+
     public GPIO() {
         leftPins = new ArrayList<Pin>();
         rightPins = new ArrayList<Pin>();
+        id = "GPIO";
     }
 
     @Override
@@ -56,7 +68,7 @@ public class GPIO extends FeatureUI {
             this.leftPins.add( pin );
 
         }
-        
+
         for ( int i = 0; i < rightPins.length(); i++ ) {
             JSONObject pinJS = rightPins.getJSONObject( i );
             Pin pin = new Pin( pinJS.getString( "name" ) );
@@ -74,26 +86,39 @@ public class GPIO extends FeatureUI {
 
     @Override
     public Object getResult() throws JSONException {
-        
+
         return data;
     }
 
     @Override
     public String getID() {
-        // TODO Auto-generated method stub
-        return null;
+        return id;
     }
 
     @Override
     public View getView( Context c ) {
-        // TODO Auto-generated method stub
-        return null;
+
+        ListView leftPinsListView = new ListView( c );
+        ViewableArrayAdapterUI<Pin> adapterL =
+                new ViewableArrayAdapterUI<Pin>( c,
+                        android.R.layout.simple_list_item_1, leftPins );
+
+        leftPinsListView.setAdapter( adapterL );
+
+        ListView rightPinsListView = new ListView( c );
+        ViewableArrayAdapterUI<Pin> adapterR =
+                new ViewableArrayAdapterUI<Pin>( c,
+                        android.R.layout.simple_list_item_1, rightPins );
+
+        rightPinsListView.setAdapter( adapterR );
+
+        return leftPinsListView;
     }
-    
+
     public List<Pin> getLeftPins() {
         return leftPins;
     }
-    
+
     public List<Pin> getRightPins() {
         return rightPins;
     }
