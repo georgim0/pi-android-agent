@@ -223,7 +223,7 @@ public class LoginActivity extends Activity {
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(mContext, ActivityListActivity.class);
+                Intent intent = new Intent(mContext, MainActivity.class);
                 mContext.startActivity(intent);
                 finish();
             } else {

@@ -1,6 +1,6 @@
 package com.kupepia.piandroidagent.ui;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +21,7 @@ public class ActivityDetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String FEATURE_ID = "feature_id";
 
     /**
      * The dummy content this fragment is presenting.
@@ -39,12 +39,12 @@ public class ActivityDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+        if (getArguments().containsKey(FEATURE_ID)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = AppContent.ITEM_MAP.get(getArguments().getString(
-                    ARG_ITEM_ID));
+            mItem = AppContent.ITEMS.get(getArguments().getInt(
+                    FEATURE_ID));
             
         }
     }

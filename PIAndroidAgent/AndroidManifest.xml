@@ -34,15 +34,11 @@
         <uses-library android:name="android.test.runner" />
 
         <activity
-            android:name="com.kupepia.piandroidagent.ui.ActivityListActivity"
-            android:label="@string/title_activity_list" >
-        </activity>
-        <activity
-            android:name="com.kupepia.piandroidagent.ui.ActivityDetailActivity"
+            android:name="com.kupepia.piandroidagent.ui.MainActivity"
             android:label="@string/title_activity_detail" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ActivityListActivity" />
+                android:value=".MainActivity" />
         </activity>
     </application>
 
