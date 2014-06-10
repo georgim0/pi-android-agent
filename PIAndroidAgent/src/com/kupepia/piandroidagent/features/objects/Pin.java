@@ -54,7 +54,7 @@ public class Pin implements Viewable {
     public View getView( Context c ) {
         View view = null;
         if ( value == -1 ) {
-            view = getDisabledView( c );
+            view = new View( c );
         } else {
             view = getAvailableView( c );
         }
@@ -66,7 +66,8 @@ public class Pin implements Viewable {
                         LayoutParams.WRAP_CONTENT );
         
         
-        lp.addRule( RelativeLayout.ALIGN_PARENT_LEFT);
+        lp.addRule( RelativeLayout.ALIGN_LEFT);
+        lp.addRule( RelativeLayout.CENTER_VERTICAL );
         
         TextView tvName = new TextView( c );
         
@@ -74,7 +75,7 @@ public class Pin implements Viewable {
         tvName.setBackgroundColor( Color.DKGRAY );
         tvName.setTextColor( Color.YELLOW );
         tvName.setTypeface( null, Typeface.BOLD_ITALIC );
-        
+        tvName.setTextScaleX( 1.2f );
         tvName.setId( 12912 );
         
         rl.addView( tvName, lp );
@@ -83,8 +84,8 @@ public class Pin implements Viewable {
                 new RelativeLayout.LayoutParams( LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT );
         
-        lp.addRule( RelativeLayout.ALIGN_PARENT_RIGHT);
-        
+        lp.addRule( RelativeLayout.ALIGN_PARENT_RIGHT );
+        lp.addRule( RelativeLayout.CENTER_VERTICAL );
         rl.addView( view, lp );
 
         return rl;
@@ -105,56 +106,31 @@ public class Pin implements Viewable {
 
         directionSwitch.setChecked( direction.equals( "OUT" ) );
        
-        directionSwitch.setTextScaleX( 0.6f );
-        isActiveSwitch.setTextScaleX( 0.6f );
+        directionSwitch.setScaleX( 0.7f );
+        directionSwitch.setScaleY( 0.8f );
         
-        int dipValue =
-                (int) TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP,
-                        (float) 1, c.getResources().getDisplayMetrics() );
 
-        
-        directionSwitch.setHeight( dipValue );
-        isActiveSwitch.setHeight( dipValue );
-        dipValue =
-                (int) TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP,
-                        (float) 2, c.getResources().getDisplayMetrics() );
-
-        
-        directionSwitch.setWidth( dipValue );
-        isActiveSwitch.setWidth( dipValue );
+        isActiveSwitch.setScaleX( 0.7f );
+        isActiveSwitch.setScaleY( 0.8f );
         
         RelativeLayout.LayoutParams lp =
                 new RelativeLayout.LayoutParams( LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT );
 
-        lp.addRule( RelativeLayout.ALIGN_PARENT_LEFT);
+       rl.addView( directionSwitch, lp );
 
-
-        rl.addView( directionSwitch, lp );
-
-        lp =
+                lp =
                 new RelativeLayout.LayoutParams( LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT );
         
-        lp.addRule( RelativeLayout.ALIGN_PARENT_RIGHT);
+        lp.addRule( RelativeLayout.RIGHT_OF, directionSwitch.getId());
         
         
         rl.addView( isActiveSwitch, lp );
 
+        
         return rl;
 
-    }
-
-    private View getDisabledView( Context c ) {
-
-        TextView tvDirection = new TextView( c );
-
-        tvDirection.setText( direction );
-        tvDirection.setBackgroundColor( Color.BLACK );
-        tvDirection.setTextColor( Color.WHITE );
-        tvDirection.setTypeface( null, Typeface.BOLD );
-
-        return tvDirection;
     }
 
 }
