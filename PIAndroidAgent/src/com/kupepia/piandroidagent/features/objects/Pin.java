@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -77,6 +78,13 @@ public class Pin implements Viewable {
         tvName.setTypeface( null, Typeface.BOLD_ITALIC );
         tvName.setTextScaleX( 1.2f );
         tvName.setId( 12912 );
+        tvName.setGravity( Gravity.CENTER );
+        
+        int dipValue = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 
+                (float) 15, c.getResources().getDisplayMetrics());
+        
+        tvName.setWidth( 5*dipValue );
+        
         
         rl.addView( tvName, lp );
         
