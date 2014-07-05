@@ -12,10 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.kupepia.piandroidagent.requests.CommunicationManager;
-import com.kupepia.piandroidagent.requests.Response;
-import com.kupepia.piandroidagent.ui.ArrayAdapterUI;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
@@ -26,7 +22,12 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-public class Updates extends FeatureUI {
+import com.kupepia.piandroidagent.features.objects.ActionKeyType;
+import com.kupepia.piandroidagent.requests.CommunicationManager;
+import com.kupepia.piandroidagent.requests.Response;
+import com.kupepia.piandroidagent.ui.ArrayAdapterUI;
+
+public class Updates extends ActionableFeatureUI {
 
     private static final String QUERY_UPDATE = "/cgi-bin/toolkit/update_api.py";
 
@@ -136,10 +137,7 @@ public class Updates extends FeatureUI {
                 new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
                         LayoutParams.WRAP_CONTENT );
 
-        Button updateButton = new Button( c );
-        updateButton.setId( 859230 );
-
-        updateButton.setText( "Update" );
+        Button updateButton = createUpdateButton( c );
 
         parentView.addView( updateButton, lp );
 
@@ -155,8 +153,26 @@ public class Updates extends FeatureUI {
 
     }
 
+    private Button createUpdateButton( Context c ) {
+        Button updateButton = new Button( c );
+        updateButton.setId( 859230 );
+
+        updateButton.setText( "Update" );
+
+        updateButton.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick( View v ) {
+                applyAction( ActionKeyType.PERFORM_UPDATE_QUERY.getValue() );
+            }
+        } );
+
+        return updateButton;
+
+    }
+
     private View getErrorView( Context c ) {
-        TextView tv = new TextView(c);
+        TextView tv = new TextView( c );
         tv.setText( "Something went wrong!" );
         return tv;
     }
@@ -192,33 +208,38 @@ public class Updates extends FeatureUI {
         TextView tv = new TextView( c );
         tv.setText( "System is up to date!" );
         tv.setId( 9121 );
-        
+
         Button checkButton = new Button( c );
         checkButton.setText( "Check for updates" );
 
         RelativeLayout.LayoutParams lp =
                 new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
                         LayoutParams.WRAP_CONTENT );
-        
+
         rl.addView( tv, lp );
         lp =
                 new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
                         LayoutParams.WRAP_CONTENT );
         lp.addRule( RelativeLayout.ALIGN_PARENT_LEFT );
         lp.addRule( RelativeLayout.BELOW, tv.getId() );
-        
+
         rl.addView( checkButton, lp );
-        
+
         return rl;
-
-    }
-
-    public void performUpdate() {
 
     }
 
     public String toString() {
         return id;
+    }
+
+    @Override
+    public View getViewAfterAction( Response r ) {
+
+        TextView tv = new TextView( rlView.getContext() );
+        tv.setText( "Update process initiated" );
+
+        return tv;
     }
 
 }
