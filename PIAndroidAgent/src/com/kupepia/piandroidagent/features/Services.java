@@ -15,33 +15,36 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.kupepia.piandroidagent.features.objects.ActionKeyType;
 import com.kupepia.piandroidagent.requests.CommunicationManager;
 import com.kupepia.piandroidagent.requests.Response;
 import com.kupepia.piandroidagent.ui.ArrayAdapterUI;
 
-public class Services extends FeatureUI {
+public class Services extends ActionableFeatureUI {
 
     private static final String DATA_QUERY =
             "/cgi-bin/toolkit/live_info.py?cmd=services";
-    private static final String ACTIVATE_SERVICE_QUERY =
-            "/cgi-bin/toolkit/live_info.py?cmd=edit_service&param2=on&param1=";
-    private static final String DEACTIVATE_SERVICE_QUERY =
-            "/cgi-bin/toolkit/live_info.py?cmd=edit_service&param2=off&param1=";
+
     Response response = null;
     Map<String, Boolean> result;
 
     private final String id;
+    private Services myself;
 
     public Services() {
         super();
         result = new HashMap<String, Boolean>();
         id = "Services App";
+        myself = this;
     }
 
     @Override
@@ -76,29 +79,6 @@ public class Services extends FeatureUI {
         return result;
     }
 
-    public Response activateService( String serviceName )
-            throws KeyManagementException, NoSuchAlgorithmException,
-            IOException, JSONException {
-        String query = ACTIVATE_SERVICE_QUERY + serviceName;
-
-        CommunicationManager cm = CommunicationManager.getInstance();
-        Response response = cm.sendRequest( query );
-
-        return response;
-
-    }
-
-    public Response deactivateService( String serviceName )
-            throws KeyManagementException, NoSuchAlgorithmException,
-            IOException, JSONException {
-        String query = DEACTIVATE_SERVICE_QUERY + serviceName;
-
-        CommunicationManager cm = CommunicationManager.getInstance();
-        Response response = cm.sendRequest( query );
-
-        return response;
-    }
-
     @Override
     public String getID() {
 
@@ -119,6 +99,7 @@ public class Services extends FeatureUI {
 
             Switch switchServiceStatus = new Switch( c );
             switchServiceStatus.setChecked( this.result.get( serviceName ) );
+            configureSwitch( switchServiceStatus, serviceName );
 
             RelativeLayout.LayoutParams lp =
                     new RelativeLayout.LayoutParams( LayoutParams.WRAP_CONTENT,
@@ -144,6 +125,28 @@ public class Services extends FeatureUI {
         lv.setAdapter( adapter );
 
         return lv;
+    }
+
+    @Override
+    public View getViewAfterAction( Response r ) {
+        if ( r.getCode() == 0 )
+            Toast.makeText( super.rlView.getContext(), "done",
+                    Toast.LENGTH_LONG ).show();
+        return null;
+    }
+
+    private void configureSwitch( Switch s, final String serviceName ) {
+        s.setOnCheckedChangeListener( new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged( CompoundButton arg0, boolean arg1 ) {
+                ActionKeyType akt =
+                        arg1 ? ActionKeyType.ACTIVATE_SERVICE_QUERY
+                                : ActionKeyType.DEACTIVATE_SERVICE_QUERY;
+                myself.applyAction( akt.getValue() + serviceName );
+            }
+
+        } );
     }
 
 }
