@@ -13,5 +13,8 @@
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_add_iptables_rule">AddIPTablesRule</string>
-
+	<string name="init_error">
+	    It seems that this module does not exist or is broken! 
+	    Update pi-web-agent and try again
+    </string>
 </resources>
