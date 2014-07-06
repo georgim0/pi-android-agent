@@ -2,3 +2,4 @@
 *.jar
 PIAndroidAgent/bin/
 PIAndroidAgent/gen/
+.metadata
