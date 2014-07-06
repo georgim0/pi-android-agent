@@ -10,9 +10,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.kupepia.piandroidagent.requests.CommunicationManager;
+import com.kupepia.piandroidagent.requests.Response;
 
 
-public class PowerManager extends FeatureUI {
+public class PowerManager extends ActionableFeatureUI {
 
     private String id;
     
@@ -49,10 +50,11 @@ public class PowerManager extends FeatureUI {
         return tv;
     }
 
-    @Override
-    public <T> void submitAction( T... params ) {
-        // TODO Auto-generated method stub
 
+    @Override
+    public View getViewAfterAction( Response r ) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
