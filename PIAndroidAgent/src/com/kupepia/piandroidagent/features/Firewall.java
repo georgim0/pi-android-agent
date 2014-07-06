@@ -34,7 +34,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-public class Firewall extends FeatureUI {
+public class Firewall extends ActionableFeatureUI {
 
     private static final String FIREWALL_DATA_QUERY =
             "/cgi-bin/toolkit/pi_iptables_api.py";
@@ -259,31 +259,11 @@ public class Firewall extends FeatureUI {
 
     }
 
+
     @Override
-    public void submitAction( Object... params ) {
-
-        CommunicationManager cm = CommunicationManager.getInstance();
-
-        String query = FIRWALL_ADD_RULE;
-        for ( Object param : params ) {
-            query += param + "&";
-        }
-
-        try {
-            Response r = cm.sendRequest( query );
-            JSONObject jsonResponse = (JSONObject) r.getBody();
-            this.code = jsonResponse.getInt( "code" );
-
-        } catch ( KeyManagementException e ) {
-
-        } catch ( IOException e ) {
-
-        } catch ( JSONException e ) {
-
-        } catch ( Exception e ) {
-
-        }
-
+    public View getViewAfterAction( Response r ) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
