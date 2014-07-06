@@ -8,4 +8,13 @@
     <string name="title_activity_detail">Activity Detail</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="addrule_prompt">Set an iptable rule</string>
+    <string name="select_action">Select action</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_activity_add_iptables_rule">AddIPTablesRule</string>
+	<string name="init_error">
+	    It seems that this module does not exist or is broken! 
+	    Update pi-web-agent and try again
+    </string>
 </resources>

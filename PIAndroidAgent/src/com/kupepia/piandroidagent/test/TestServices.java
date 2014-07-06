@@ -1,14 +1,12 @@
 package com.kupepia.piandroidagent.test;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.kupepia.piandroidagent.features.Services;
 import com.kupepia.piandroidagent.requests.CommunicationManager;
-import com.kupepia.piandroidagent.requests.Response;
 
 import android.test.AndroidTestCase;
 

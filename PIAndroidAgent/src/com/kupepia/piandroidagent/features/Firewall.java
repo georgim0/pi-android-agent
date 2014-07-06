@@ -14,14 +14,19 @@ import com.kupepia.piandroidagent.features.objects.Chain;
 import com.kupepia.piandroidagent.features.objects.Rule;
 import com.kupepia.piandroidagent.requests.CommunicationManager;
 import com.kupepia.piandroidagent.requests.Response;
+import com.kupepia.piandroidagent.ui.AddIPTablesRule;
+import com.kupepia.piandroidagent.ui.MainActivity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -29,10 +34,12 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-public class Firewall extends FeatureUI {
+public class Firewall extends ActionableFeatureUI {
 
     private static final String FIREWALL_DATA_QUERY =
             "/cgi-bin/toolkit/pi_iptables_api.py";
+    private static final String FIRWALL_ADD_RULE =
+            "/cgi-bin/toolkit/add_iptables_rule.py?";
     /*
      * {"FORWARD": {"rules": [{"protocol": "udplite", "target": "ACCEPT",
      * "otherinfo": "--", "destination": "ALL", "source": "64.12.34.12/32",
@@ -48,9 +55,14 @@ public class Firewall extends FeatureUI {
 
     private ScrollView sv;
     private TextView tvDefault;
+    private int code;
+
+    Button addRuleButton;
+    private Spinner chainSpinner;
 
     public Firewall() {
         chains = new ArrayList<Chain>();
+        code = 0;
     }
 
     @Override
@@ -106,89 +118,134 @@ public class Firewall extends FeatureUI {
 
     @Override
     public View getView( Context c ) {
-        Spinner chainSpinner = new Spinner( c );
+        if ( code == 0 ) {
 
-        sv = new ScrollView( c );
-        sv.setHorizontalScrollBarEnabled( true );
-
-        if ( chainView == null )
-            chainView = new TableLayout( c );
-
-        if ( adapter == null )
-            adapter =
-                    new ArrayAdapter<Chain>( c,
-                            android.R.layout.simple_spinner_dropdown_item,
-                            chains );
-        tvDefault = new TextView( c );
-
-        chainSpinner.setAdapter( adapter );
-
-        chainSpinner.setOnItemSelectedListener( new OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected( AdapterView<?> parent, View view,
-                    int position, long id ) {
-
-                Chain selectedChain = adapter.getItem( position );
-                sv.removeAllViews();
-                HorizontalScrollView hsv =
-                        new HorizontalScrollView( view.getContext() );
-
-                hsv.addView( selectedChain.getView( view.getContext() ) );
-                sv.addView( hsv );
-
-                setPolicyView( tvDefault, selectedChain.getDefaultRule() );
+            if ( chainSpinner == null ) {
+                chainSpinner = new Spinner( c );
             }
 
-            @Override
-            public void onNothingSelected( AdapterView<?> arg0 ) {
-                // TODO Auto-generated method stub
+            sv = new ScrollView( c );
+            sv.setHorizontalScrollBarEnabled( true );
 
+            if ( chainView == null )
+                chainView = new TableLayout( c );
+
+            if ( adapter == null )
+                adapter =
+                        new ArrayAdapter<Chain>( c,
+                                android.R.layout.simple_spinner_dropdown_item,
+                                chains );
+            tvDefault = new TextView( c );
+            if ( addRuleButton == null ) {
+                addRuleButton = new Button( c );
             }
+            chainSpinner.setAdapter( adapter );
 
-        } );
+            chainSpinner
+                    .setOnItemSelectedListener( new OnItemSelectedListener() {
 
-        RelativeLayout rl = new RelativeLayout( c );
+                        @Override
+                        public void onItemSelected( AdapterView<?> parent,
+                                View view, int position, long id ) {
 
-        RelativeLayout.LayoutParams lp =
-                new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
-                        LayoutParams.WRAP_CONTENT );
+                            Chain selectedChain = adapter.getItem( position );
+                            sv.removeAllViews();
+                            HorizontalScrollView hsv =
+                                    new HorizontalScrollView( view.getContext() );
 
-        lp.addRule( RelativeLayout.ALIGN_PARENT_LEFT );
+                            hsv.addView( selectedChain.getView( view
+                                    .getContext() ) );
+                            sv.addView( hsv );
 
-        rl.addView( chainSpinner, lp );
+                            setPolicyView( tvDefault,
+                                    selectedChain.getDefaultRule() );
+                        }
 
-        chainSpinner.setId( chainSpinner.hashCode() );
+                        @Override
+                        public void onNothingSelected( AdapterView<?> arg0 ) {
+                            // TODO Auto-generated method stub
 
-        tvDefault.setId( 18232 );
-        
-        lp =
-                new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
-                        LayoutParams.WRAP_CONTENT );
+                        }
 
-        lp.addRule( RelativeLayout.BELOW, chainSpinner.getId() );
+                    } );
 
-        lp.addRule( RelativeLayout.CENTER_HORIZONTAL );
+            RelativeLayout rl = new RelativeLayout( c );
 
-        rl.addView( tvDefault, lp );
+            RelativeLayout.LayoutParams lp =
+                    new RelativeLayout.LayoutParams( LayoutParams.WRAP_CONTENT,
+                            LayoutParams.WRAP_CONTENT );
 
-        lp =
-                new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
-                        LayoutParams.WRAP_CONTENT );
+            lp.addRule( RelativeLayout.ALIGN_PARENT_LEFT );
 
-        lp.addRule( RelativeLayout.BELOW, tvDefault.getId() );
+            rl.addView( chainSpinner, lp );
 
-        lp.addRule( RelativeLayout.CENTER_HORIZONTAL );
+            addRuleButton.setText( "Add rule" );
+            addRuleButton.setOnClickListener( new View.OnClickListener() {
 
-        sv.addView( chainView );
+                @Override
+                public void onClick( View v ) {
 
-        rl.addView( sv, lp );
+                    prepareAddRuleInterface( v.getContext() );
 
-        return rl;
+                }
+
+            } );
+
+            chainSpinner.setId( chainSpinner.hashCode() );
+
+            tvDefault.setId( 18232 );
+
+            lp =
+                    new RelativeLayout.LayoutParams( LayoutParams.WRAP_CONTENT,
+                            LayoutParams.WRAP_CONTENT );
+
+            lp.addRule( RelativeLayout.RIGHT_OF, chainSpinner.getId() );
+
+            rl.addView( addRuleButton, lp );
+
+            lp =
+                    new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
+                            LayoutParams.WRAP_CONTENT );
+
+            lp.addRule( RelativeLayout.BELOW, chainSpinner.getId() );
+
+            lp.addRule( RelativeLayout.CENTER_HORIZONTAL );
+
+            rl.addView( tvDefault, lp );
+
+            lp =
+                    new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,
+                            LayoutParams.WRAP_CONTENT );
+
+            lp.addRule( RelativeLayout.BELOW, tvDefault.getId() );
+
+            lp.addRule( RelativeLayout.CENTER_HORIZONTAL );
+
+            sv.addView( chainView );
+
+            rl.addView( sv, lp );
+
+            return rl;
+        } else {
+
+            TextView tv = new TextView( c );
+            tv.setText( "Something is not right" );
+            code = 0;
+            return tv;
+
+        }
     }
 
-    public static void
-            setPolicyView( TextView tvDefault, String defaultRule ) {
+    protected void prepareAddRuleInterface( Context context ) {
+        Intent addIpTablesRequest = new Intent(context, AddIPTablesRule.class);
+        
+        addIpTablesRequest.putExtra( "chain", chains.get( chainSpinner.getSelectedItemPosition() ).getName() );
+        
+        ( (Activity) context ).startActivityForResult(addIpTablesRequest, MainActivity.FIREWALL_CODE);
+        
+    }
+
+    public static void setPolicyView( TextView tvDefault, String defaultRule ) {
 
         tvDefault.setText( "Default policy: " + defaultRule );
         int color = Color.BLUE;
@@ -197,9 +254,16 @@ public class Firewall extends FeatureUI {
         } else if ( defaultRule.equals( "DROP" ) ) {
             color = Color.RED;
         }
-        
+
         tvDefault.setTextColor( color );
 
+    }
+
+
+    @Override
+    public View getViewAfterAction( Response r ) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
