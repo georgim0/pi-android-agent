@@ -11,19 +11,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
+
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.ViewSwitcher;
 
 import com.kupepia.piandroidagent.features.objects.Pin;
 import com.kupepia.piandroidagent.requests.CommunicationManager;
 import com.kupepia.piandroidagent.requests.Response;
-import com.kupepia.piandroidagent.ui.ArrayAdapterUI;
 import com.kupepia.piandroidagent.ui.ViewableArrayAdapterUI;
 
 public class GPIO extends FeatureUI {

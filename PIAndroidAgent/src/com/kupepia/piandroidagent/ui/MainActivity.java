@@ -72,7 +72,6 @@ public class MainActivity extends Activity {
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private String[] mPlanetTitles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

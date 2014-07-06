@@ -3,16 +3,13 @@ package com.kupepia.piandroidagent.features;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import org.json.JSONException;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.RelativeLayout;
 
 import com.kupepia.piandroidagent.requests.CommunicationManager;
 import com.kupepia.piandroidagent.requests.Response;
