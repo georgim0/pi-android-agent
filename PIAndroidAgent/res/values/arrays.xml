@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="action_array">
+        <item>ACCEPT</item>
+        <item>DROP</item>
+    </array>
+
+   <string-array name="iptable_protocols">
+	   <item>ALL</item>
+       <item>TCP</item>
+       <item>UDPLITE</item>
+       <item>ICMP</item>
+       <item>ICMP</item>
+       <item>ESP</item>
+       <item>AH</item>
+       <item>SCTP</item>
+    </string-array>
+    
+</resources>

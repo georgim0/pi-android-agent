@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+<Spinner
+	android:id="@+id/actionspinner"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:entries="@array/action_array"
+	android:prompt="@string/select_action" />
+
+<Spinner
+        android:id="@+id/protocolspinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/iptable_protocols"
+        android:prompt="@string/addrule_prompt" />
+
+<TextView
+       android:id="@+id/addressTextView"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+/>
+
+<Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+
+</LinearLayout>
