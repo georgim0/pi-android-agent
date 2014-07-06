@@ -8,6 +8,7 @@ import com.kupepia.piandroidagent.features.FeatureUI;
 import com.kupepia.piandroidagent.features.Firewall;
 import com.kupepia.piandroidagent.features.GPIO;
 import com.kupepia.piandroidagent.features.Overview;
+import com.kupepia.piandroidagent.features.PackageManagement;
 import com.kupepia.piandroidagent.features.Services;
 import com.kupepia.piandroidagent.features.Updates;
 
@@ -37,6 +38,7 @@ public class AppContent {
         addItem( new Updates() );
         addItem( new Firewall() );
         addItem( new GPIO() );
+        addItem( new PackageManagement() );
     }
 
     private static void addItem( FeatureUI item ) {
