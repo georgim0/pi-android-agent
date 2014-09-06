@@ -3,7 +3,7 @@ package com.kupepia.piandroidagent.features.objects;
 public enum StatusType {
 
     INSTALLED( "installed" ), UNINSTALLED( "uninstalled" ), ON( "on" ), OFF(
-            "off" );
+            "off" ), STATUS( "status");
 
     private String value;
 

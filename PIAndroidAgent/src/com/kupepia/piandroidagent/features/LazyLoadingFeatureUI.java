@@ -75,8 +75,6 @@ public abstract class LazyLoadingFeatureUI extends FeatureUI {
         protected void onPostExecute( final Void success ) {
             getViewAfterAction( response );
             
-            
-            
             if ( dialog.isShowing() ) {
                 dialog.dismiss();
             }

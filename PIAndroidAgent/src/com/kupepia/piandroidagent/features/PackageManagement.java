@@ -2,26 +2,27 @@ package com.kupepia.piandroidagent.features;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.util.Log;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.RelativeLayout.LayoutParams;
 
 import com.kupepia.piandroidagent.features.objects.ActionKeyType;
 import com.kupepia.piandroidagent.features.objects.PackageDetails;
@@ -39,7 +40,6 @@ public class PackageManagement extends LazyLoadingFeatureUI {
     private String queryParam = "?action=getPackageList";
     private PackageManagement myself;
     private Map<String, PackageDetails> packageListInfo = null;
-    private int counter = 1;
     List<View> views = null;
     Map<String, PackageEntryViews> packageEntryViews = null;
 
@@ -53,18 +53,10 @@ public class PackageManagement extends LazyLoadingFeatureUI {
 
     @Override
     public void init() {
-        // might be used for lazy initialisation
-
         Object packListData = executeQuery( QUERY_PATH + this.queryParam );
         if ( packListData instanceof JSONArray ) {
             this.packageListInfo = initialisePackListNames( packListData );
-
         }
-
-        // for now just initialise the packListStatus
-
-        // initialisePackListStatus();
-
     }
 
     private Map<String, PackageDetails> initialisePackListNames(
@@ -88,27 +80,39 @@ public class PackageManagement extends LazyLoadingFeatureUI {
         return packNamesList;
     }
 
+    /*
+     * { "apt-cache": { "status": false, "content": [somehtml, false ] } }
+     */
+
+    /*
+     * [ { "Status":
+     * "<div class=\"on_off_switch\">\n<input type=\"checkbox\" name=\"emacs23\" onclick=\"submit_package(this)\" class=\"on_off_switch-checkbox\" id=\"emacs23\" checked><label class=\"on_off_switch-label\" for=\"emacs23\">\n<div class=\"on_off_switch-inner\"></div>\n<div class=\"on_off_switch-switch\"></div>\n</label>\n</div>\n"
+     * , "installed": false, "Version": " 23.4+1-4\n", "Package Name":
+     * "emacs23", "Description":
+     * " The GNU Emacs editor (with GTK+ user interface)\n" } ]
+     */
+
     private String updatePackListInfo( Object data ) {
-        if ( ! ( data instanceof JSONArray ) ) {
+        if ( ! ( data instanceof JSONObject ) ) {
             return null; // we got the STOP response
         }
         JSONObject jsonObject;
         String packName = "";
         try {
-            jsonObject = ( (JSONArray) data ).getJSONObject( 0 );// there is
-                                                                 // only one
-            Boolean status =
-                    jsonObject.getBoolean( StatusType.INSTALLED.getValue() );
-            String version = jsonObject.getString( "Version" );
-            String description = jsonObject.getString( "Description" );
-            packName = jsonObject.getString( "Package Name" );
-            PackageDetails packDetails =
-                    new PackageDetails( status, version, packName, description );
-            Log.w( "com.kupepia", packDetails.toString() );
-            packageListInfo.put( packName, packDetails );
+            jsonObject = ( (JSONObject) data );
+            if ( jsonObject.keys() != null && jsonObject.keys().hasNext() ) {
+
+                packName = (String) jsonObject.keys().next();
+                JSONObject jo = (JSONObject) jsonObject.get( packName );
+                Boolean status = jo.getBoolean( StatusType.STATUS.getValue() );
+                // String version = jsonObject.getString( "Version" );
+                // String description = jsonObject.getString( "Description" );
+                PackageDetails packDetails =
+                        new PackageDetails( status, "", packName, "" );
+                packageListInfo.put( packName, packDetails );
+            }
 
         } catch ( JSONException e ) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return packName;
@@ -136,7 +140,6 @@ public class PackageManagement extends LazyLoadingFeatureUI {
 
     @Override
     public Object getResult() throws JSONException {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -151,7 +154,6 @@ public class PackageManagement extends LazyLoadingFeatureUI {
         ListView lv = new ListView( c );
         views = new ArrayList<View>();
 
-        int j = 0;
         for ( String packName : this.packageListInfo.keySet() ) {
             PackageEntryViews record = new PackageEntryViews();
 
@@ -185,9 +187,8 @@ public class PackageManagement extends LazyLoadingFeatureUI {
                             LayoutParams.WRAP_CONTENT );
             lp.addRule( RelativeLayout.ALIGN_PARENT_RIGHT );
 
-            rl.addView( record.getTvDescription(), lp );
-
             rl.addView( switchPackStatus, lp );
+            rl.addView( record.getTvDescription(), lp );
 
             views.add( rl );
             packageEntryViews.put( packName, record );
@@ -200,28 +201,47 @@ public class PackageManagement extends LazyLoadingFeatureUI {
         lv.setAdapter( adapter );
 
         // lazy loading the first index = 1
-        Log.w( "lazyStartsHere", ActionKeyType.PACKAGE_INFO_QUERY.getValue()
-                + counter );
-        applyAction( ActionKeyType.PACKAGE_INFO_QUERY.getValue() + counter );
+        // applyAction( ActionKeyType.PACKAGE_INFO_QUERY.getValue() + counter );
         // in bg
+        initLazyLoading();
 
         return lv;
 
     }
 
+    private void initLazyLoading() {
+        List<List<String>> chunks =
+                getChunked( (List<String>) packageListInfo.keySet(), 10 );
+        for ( List<String> aList : chunks ) {
+            applyAction( ActionKeyType.PACKAGE_MASS_INFO_QUERY.getValue()
+                    + aList.toString() );
+        }
+        // applyAction in bg
+
+    }
+
+    private List<List<String>> getChunked( List<String> list, int chunkSize ) {
+        List<List<String>> chunks = new LinkedList<List<String>>();
+        for ( int i = 0; i < list.size(); i += chunkSize ) {
+            chunks.add( list.subList( i,
+                    i + Math.min( chunkSize, list.size() - i ) ) );
+        }
+        return chunks;
+    }
+
     @Override
     public View getViewAfterAction( Response r ) {
+        if ( r == null ) {
+            return null;
+        }
         String packName = null;
         try {
             // packName will be initialised if the packListInfo was updated
             packName = updatePackListInfo( r.getBody() );
-            Log.w( "getViewAfterAction_bg_body", "packageListSize: "
-                    + packageListInfo.size() + " " + r.getBody().toString() );
         } catch ( JSONException e1 ) {
             e1.printStackTrace();
         }
 
-        // views.get( counter - 1 ).setVisibility( View.VISIBLE );
         if ( packName != null ) {
             Switch sw = packageEntryViews.get( packName ).getSwitchPackStatus();
             sw.setVisibility( View.VISIBLE );
@@ -234,16 +254,7 @@ public class PackageManagement extends LazyLoadingFeatureUI {
         if ( r.getCode() == 0 ) {
             Toast.makeText( super.rlView.getContext(), "done",
                     Toast.LENGTH_LONG ).show();
-            Log.w( "getViewAfterAction_bg_code", "done" );
-        }
-
-        if ( packageListInfo.size() > counter ) {
-            // lazy loading
-            counter++;
-            Log.w( "getViewAfterAction_bg_applyAction",
-                    ActionKeyType.PACKAGE_INFO_QUERY.getValue() + counter );
-            applyAction( ActionKeyType.PACKAGE_INFO_QUERY.getValue() + counter );
-            // in bg
+            // Log.w( "getViewAfterAction_bg_code", "done" );
         }
 
         return null;
@@ -258,7 +269,6 @@ public class PackageManagement extends LazyLoadingFeatureUI {
                 ActionKeyType akt =
                         arg1 ? ActionKeyType.PACKAGE_INSTALL_QUERY
                                 : ActionKeyType.PACKAGE_UNINSTALL_QUERY;
-                Log.w( "configureSwitch", akt.getValue() + packName );
                 myself.applyAction( akt.getValue() + packName );
             }
 
