@@ -15,7 +15,16 @@ public enum ActionKeyType {
     PERFORM_UPDATE_QUERY( "/cgi-bin/toolkit/update.py?action=update" ),
 
     // Package Recommendation
-    GET_PACKAGE_INFO( "/cgi-bin/toolkit/packagerecommendations.py?index=" );
+    PACKAGE_INFO_QUERY( "/cgi-bin/toolkit/package_recommendations.py?index=" ),
+
+    PACKAGE_INSTALL_QUERY(
+            "/cgi-bin/toolkit/installUninstallPackage.py?action=install&packageName=" ),
+
+    PACKAGE_UNINSTALL_QUERY(
+            "/cgi-bin/toolkit/installUninstallPackage.py?action=uninstall&packageName=" ),
+
+    PACKAGE_MASS_INFO_QUERY(
+            "/cgi-bin/toolkit/pm_api.py?op=check_group&packages=" );
 
     private String value;
 

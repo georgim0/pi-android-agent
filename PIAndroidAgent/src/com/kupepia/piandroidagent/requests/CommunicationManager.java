@@ -65,7 +65,7 @@ public class CommunicationManager {
         String basicAuth = "Basic "
                 + Base64.encodeToString( userpass.getBytes(), Base64.DEFAULT );
         connection.setRequestProperty( "Authorization", basicAuth );
-
+        
         connection.connect();
         InputStream is = connection.getInputStream();
 
@@ -82,7 +82,7 @@ public class CommunicationManager {
         streamReader.close();
         JSONArray json = null;
         json = new JSONArray( responseStrBuilder.toString() );
-
+        
         Response res = new Response( json, connection.getResponseCode() );
         return res;
 
