@@ -239,8 +239,7 @@ public class PackageManagement extends LazyLoadingFeatureUI {
         } catch ( JSONException e1 ) {
             e1.printStackTrace();
         }
-        Toast.makeText( super.rlView.getContext(), packageListInfo.toString(),
-                Toast.LENGTH_LONG ).show();
+
         for ( String packName : packageListInfoKeys ) {
 
             Switch sw = packageEntryViews.get( packName ).getSwitchPackStatus();

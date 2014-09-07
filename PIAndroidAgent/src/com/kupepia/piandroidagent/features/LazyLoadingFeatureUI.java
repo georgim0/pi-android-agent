@@ -13,24 +13,19 @@ import com.kupepia.piandroidagent.requests.CommunicationManager;
 import com.kupepia.piandroidagent.requests.Response;
 
 public abstract class LazyLoadingFeatureUI extends FeatureUI {
-    private String query;
     private final LazyLoadingFeatureUI myself;
 
     public LazyLoadingFeatureUI() {
         myself = this;
     }
 
-    private void setNewQuery( String query ) {
-        this.query = query;
-    }
-
     public void applyAction( String query ) {
-        setNewQuery( query );
+
         LazyLoadFeatureTask aft = new LazyLoadFeatureTask();
-        aft.execute();
+        aft.execute(query);
     }
 
-    private Response action() throws KeyManagementException,
+    private Response action(String query) throws KeyManagementException,
             NoSuchAlgorithmException, IOException, JSONException {
 
         CommunicationManager cm = CommunicationManager.getInstance();
@@ -40,7 +35,7 @@ public abstract class LazyLoadingFeatureUI extends FeatureUI {
 
     public abstract View getViewAfterAction( Response r );
 
-    public class LazyLoadFeatureTask extends AsyncTask<Void, Void, Void> {
+    public class LazyLoadFeatureTask extends AsyncTask<String, Void, Void> {
 
         private ProgressDialog dialog;
         private Response response = null;
@@ -54,9 +49,9 @@ public abstract class LazyLoadingFeatureUI extends FeatureUI {
         }
 
         @Override
-        protected Void doInBackground( Void... params ) {
+        protected Void doInBackground( String... params ) {
             try {
-                response = myself.action();
+                response = myself.action(params[0]);
             } catch ( KeyManagementException e ) {
                 e.printStackTrace();
             } catch ( NoSuchAlgorithmException e ) {
