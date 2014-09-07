@@ -42,7 +42,6 @@ public class PackageManagement extends LazyLoadingFeatureUI {
     private Map<String, PackageDetails> packageListInfo = null;
     private List<View> views = null;
     private Map<String, PackageEntryViews> packageEntryViews = null;
-    private List<String> packageListInfoKeys = new ArrayList<String>();
 
     public PackageManagement() {
         super();
@@ -81,10 +80,11 @@ public class PackageManagement extends LazyLoadingFeatureUI {
         return packNamesList;
     }
 
-    private void updatePackListInfo( Object data ) {
+    private List<String> updatePackListInfo( Object data ) {
         if ( ! ( data instanceof JSONObject ) ) {
-            return; // we got the STOP response
+            return null; // we got the STOP response
         }
+        List<String> updatedPackages = new ArrayList<String>();
         JSONObject jsonObject;
         String packName = "";
         try {
@@ -97,13 +97,14 @@ public class PackageManagement extends LazyLoadingFeatureUI {
                 Boolean status = jo.getBoolean( StatusType.STATUS.getValue() );
                 PackageDetails packDetails =
                         new PackageDetails( status, "", packName, "" );
-                packageListInfoKeys.add( packName );
                 packageListInfo.put( packName, packDetails );
+                updatedPackages.add( packName );
             }
 
         } catch ( JSONException e ) {
             e.printStackTrace();
         }
+        return updatedPackages;
     }
 
     public Object executeQuery( String query ) {
@@ -233,22 +234,25 @@ public class PackageManagement extends LazyLoadingFeatureUI {
         if ( r == null ) {
             return null;
         }
+        List<String> updatedPackages = null;
         try {
             // packName will be initialised if the packListInfo was updated
-            updatePackListInfo( r.getBody() );
+            updatedPackages = updatePackListInfo( r.getBody() );
         } catch ( JSONException e1 ) {
             e1.printStackTrace();
         }
 
-        for ( String packName : packageListInfoKeys ) {
-
+        if ( updatedPackages == null ) {
+            return null;
+        }
+        
+        for ( String packName : updatedPackages ) {
             Switch sw = packageEntryViews.get( packName ).getSwitchPackStatus();
             sw.setVisibility( View.VISIBLE );
             sw.setChecked( packageListInfo.get( packName ).getInstallStatus() );
             configureSwitch( sw, packName );
             packageEntryViews.get( packName ).getTvDescription()
                     .setVisibility( View.INVISIBLE );
-
         }
 
         if ( r.getCode() == 0 ) {

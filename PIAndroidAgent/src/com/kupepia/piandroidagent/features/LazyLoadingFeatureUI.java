@@ -22,10 +22,10 @@ public abstract class LazyLoadingFeatureUI extends FeatureUI {
     public void applyAction( String query ) {
 
         LazyLoadFeatureTask aft = new LazyLoadFeatureTask();
-        aft.execute(query);
+        aft.execute( query );
     }
 
-    private Response action(String query) throws KeyManagementException,
+    private Response action( String query ) throws KeyManagementException,
             NoSuchAlgorithmException, IOException, JSONException {
 
         CommunicationManager cm = CommunicationManager.getInstance();
@@ -51,7 +51,7 @@ public abstract class LazyLoadingFeatureUI extends FeatureUI {
         @Override
         protected Void doInBackground( String... params ) {
             try {
-                response = myself.action(params[0]);
+                response = myself.action( params[0] );
             } catch ( KeyManagementException e ) {
                 e.printStackTrace();
             } catch ( NoSuchAlgorithmException e ) {
@@ -67,7 +67,7 @@ public abstract class LazyLoadingFeatureUI extends FeatureUI {
         @Override
         protected void onPostExecute( final Void success ) {
             getViewAfterAction( response );
-            
+
             if ( dialog.isShowing() ) {
                 dialog.dismiss();
             }
