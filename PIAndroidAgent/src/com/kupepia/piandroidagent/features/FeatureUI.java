@@ -12,7 +12,7 @@ public abstract class FeatureUI implements Feature {
 
     private final FeatureUI myself;
     protected RelativeLayout rlView = null;
-
+    
     public FeatureUI() {
         myself = this;
     }

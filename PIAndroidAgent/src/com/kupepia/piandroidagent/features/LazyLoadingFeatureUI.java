@@ -9,8 +9,6 @@ import org.json.JSONException;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.view.View;
-import android.widget.RelativeLayout;
-
 import com.kupepia.piandroidagent.requests.CommunicationManager;
 import com.kupepia.piandroidagent.requests.Response;
 

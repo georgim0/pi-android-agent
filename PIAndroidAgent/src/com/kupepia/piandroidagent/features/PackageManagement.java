@@ -2,17 +2,17 @@ package com.kupepia.piandroidagent.features;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import android.content.Context;
-import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -40,8 +40,9 @@ public class PackageManagement extends LazyLoadingFeatureUI {
     private String queryParam = "?action=getPackageList";
     private PackageManagement myself;
     private Map<String, PackageDetails> packageListInfo = null;
-    List<View> views = null;
-    Map<String, PackageEntryViews> packageEntryViews = null;
+    private List<View> views = null;
+    private Map<String, PackageEntryViews> packageEntryViews = null;
+    private List<String> packageListInfoKeys = new ArrayList<String>();
 
     public PackageManagement() {
         super();
@@ -80,42 +81,29 @@ public class PackageManagement extends LazyLoadingFeatureUI {
         return packNamesList;
     }
 
-    /*
-     * { "apt-cache": { "status": false, "content": [somehtml, false ] } }
-     */
-
-    /*
-     * [ { "Status":
-     * "<div class=\"on_off_switch\">\n<input type=\"checkbox\" name=\"emacs23\" onclick=\"submit_package(this)\" class=\"on_off_switch-checkbox\" id=\"emacs23\" checked><label class=\"on_off_switch-label\" for=\"emacs23\">\n<div class=\"on_off_switch-inner\"></div>\n<div class=\"on_off_switch-switch\"></div>\n</label>\n</div>\n"
-     * , "installed": false, "Version": " 23.4+1-4\n", "Package Name":
-     * "emacs23", "Description":
-     * " The GNU Emacs editor (with GTK+ user interface)\n" } ]
-     */
-
-    private String updatePackListInfo( Object data ) {
+    private void updatePackListInfo( Object data ) {
         if ( ! ( data instanceof JSONObject ) ) {
-            return null; // we got the STOP response
+            return; // we got the STOP response
         }
         JSONObject jsonObject;
         String packName = "";
         try {
             jsonObject = ( (JSONObject) data );
-            if ( jsonObject.keys() != null && jsonObject.keys().hasNext() ) {
+            JSONArray keys = jsonObject.names();
+            for ( int i = 0; i < keys.length(); i++ ) {
 
-                packName = (String) jsonObject.keys().next();
+                packName = keys.getString( i );
                 JSONObject jo = (JSONObject) jsonObject.get( packName );
                 Boolean status = jo.getBoolean( StatusType.STATUS.getValue() );
-                // String version = jsonObject.getString( "Version" );
-                // String description = jsonObject.getString( "Description" );
                 PackageDetails packDetails =
                         new PackageDetails( status, "", packName, "" );
+                packageListInfoKeys.add( packName );
                 packageListInfo.put( packName, packDetails );
             }
 
         } catch ( JSONException e ) {
             e.printStackTrace();
         }
-        return packName;
     }
 
     public Object executeQuery( String query ) {
@@ -153,8 +141,8 @@ public class PackageManagement extends LazyLoadingFeatureUI {
 
         ListView lv = new ListView( c );
         views = new ArrayList<View>();
-
-        for ( String packName : this.packageListInfo.keySet() ) {
+        Set<String> keys = this.packageListInfo.keySet();
+        for ( String packName : keys ) {
             PackageEntryViews record = new PackageEntryViews();
 
             RelativeLayout rl = new RelativeLayout( c );
@@ -210,18 +198,29 @@ public class PackageManagement extends LazyLoadingFeatureUI {
     }
 
     private void initLazyLoading() {
-        List<List<String>> chunks =
-                getChunked( (List<String>) packageListInfo.keySet(), 10 );
+        List<String> packageList = set2List( packageListInfo.keySet() );
+        List<List<String>> chunks = getChunked( packageList, 10 );
         for ( List<String> aList : chunks ) {
+            String stringify =
+                    aList.toString().replace( "[", "['" )
+                            .replace( ", ", "', '" ).replace( "]", "']" )
+                            .replace( " ", "%20" );
             applyAction( ActionKeyType.PACKAGE_MASS_INFO_QUERY.getValue()
-                    + aList.toString() );
+                    + stringify );
         }
         // applyAction in bg
 
     }
 
+    private List<String> set2List( Set<String> keySet ) {
+        List<String> list = new ArrayList<String>();
+        list.addAll( keySet );
+        return list;
+    }
+
     private List<List<String>> getChunked( List<String> list, int chunkSize ) {
         List<List<String>> chunks = new LinkedList<List<String>>();
+
         for ( int i = 0; i < list.size(); i += chunkSize ) {
             chunks.add( list.subList( i,
                     i + Math.min( chunkSize, list.size() - i ) ) );
@@ -234,21 +233,23 @@ public class PackageManagement extends LazyLoadingFeatureUI {
         if ( r == null ) {
             return null;
         }
-        String packName = null;
         try {
             // packName will be initialised if the packListInfo was updated
-            packName = updatePackListInfo( r.getBody() );
+            updatePackListInfo( r.getBody() );
         } catch ( JSONException e1 ) {
             e1.printStackTrace();
         }
+        Toast.makeText( super.rlView.getContext(), packageListInfo.toString(),
+                Toast.LENGTH_LONG ).show();
+        for ( String packName : packageListInfoKeys ) {
 
-        if ( packName != null ) {
             Switch sw = packageEntryViews.get( packName ).getSwitchPackStatus();
             sw.setVisibility( View.VISIBLE );
             sw.setChecked( packageListInfo.get( packName ).getInstallStatus() );
             configureSwitch( sw, packName );
             packageEntryViews.get( packName ).getTvDescription()
                     .setVisibility( View.INVISIBLE );
+
         }
 
         if ( r.getCode() == 0 ) {
